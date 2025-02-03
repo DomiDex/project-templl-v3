@@ -48,7 +48,6 @@ export function useProfile() {
     if (!user?.id) return;
 
     try {
-      // Delete old profile image if it exists and a new one is being set
       if (
         profile?.profile_image_url &&
         formData.profile_image_url &&
@@ -62,12 +61,13 @@ export function useProfile() {
         }
       }
 
-      const normalizedData = {
+      const normalizedData: Profile = {
+        ...profile!,
         ...formData,
         path: formData.username
           ? `/${formData.username.toLowerCase()}`
-          : formData.path,
-        username: formData.username?.toLowerCase(),
+          : profile?.path ?? null,
+        username: formData.username?.toLowerCase() ?? profile?.username ?? null,
         profile_image_url: formData.profile_image_url || null,
       };
 
@@ -78,11 +78,9 @@ export function useProfile() {
 
       if (error) throw error;
 
-      setProfile((prev) => (prev ? { ...prev, ...normalizedData } : null));
-      toast.success('Profile updated successfully');
+      setProfile(normalizedData);
     } catch (error) {
       console.error('Error updating profile:', error);
-      toast.error('Failed to update profile');
       throw error;
     }
   };
