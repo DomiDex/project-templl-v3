@@ -1,78 +1,79 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Profile } from '@/types';
-import { useAuthStore } from '@/features/auth/stores/useAuthStore';
-import { createClient } from '@/utils/supabase/client';
-import { Button } from '@/components/ui/button';
-import FormLabel from '@/components/ui/FormLabel';
 import { Input } from '@/components/ui/input';
+import { TextArea } from '@/components/ui/TextArea';
+import { Button } from '@/components/ui/button';
 import ProfileImageUpload from '@/components/ui/ProfileImageUpload';
+import FormLabel from '@/components/ui/FormLabel';
 import { useProfile } from '../hooks/useProfile';
+import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { toast } from 'sonner';
 
-type ProfileFormData = Omit<Profile, 'id' | 'created_at' | 'updated_at'>;
-
 export default function ProfileForm() {
+  const { profile, loading: profileLoading, updateProfile } = useProfile();
   const { user } = useAuthStore();
-  const { profile } = useProfile();
-  const supabase = createClient();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState<Partial<ProfileFormData>>({
-    description: '',
+  const [formData, setFormData] = useState({
     profile_image_url: '',
-    email: '',
     phone: '',
     website_url: '',
     linkedin_url: '',
     x_url: '',
     github_url: '',
+    description: '',
   });
 
   useEffect(() => {
     if (profile) {
       setFormData({
-        description: profile.description || '',
         profile_image_url: profile.profile_image_url || '',
-        email: profile.email || '',
         phone: profile.phone || '',
         website_url: profile.website_url || '',
         linkedin_url: profile.linkedin_url || '',
         x_url: profile.x_url || '',
         github_url: profile.github_url || '',
+        description: profile.description || '',
       });
     }
   }, [profile]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  if (profileLoading) {
+    return (
+      <div className='space-y-6 animate-pulse'>
+        <div className='h-32 bg-gray-200 dark:bg-gray-700 rounded-lg' />
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+          {[...Array(6)].map((_, i) => (
+            <div key={i}>
+              <div className='h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded mb-2' />
+              <div className='h-10 bg-gray-200 dark:bg-gray-700 rounded' />
+            </div>
+          ))}
+        </div>
+        <div>
+          <div className='h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded mb-2' />
+          <div className='h-24 bg-gray-200 dark:bg-gray-700 rounded' />
+        </div>
+      </div>
+    );
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user?.id) return;
-
     setLoading(true);
-    const promise = new Promise(async (resolve, reject) => {
-      try {
-        const { error } = await supabase
-          .from('profiles')
-          .update(formData)
-          .eq('id', user.id);
 
-        if (error) throw error;
-        resolve('Profile updated successfully');
-      } catch (error) {
-        reject(error);
-      } finally {
-        setLoading(false);
-      }
-    });
-
-    toast.promise(promise, {
-      loading: 'Updating profile...',
-      success: 'Profile updated successfully!',
-      error: (error) => {
-        console.error('Error updating profile:', error);
-        return 'Error updating profile. Please try again.';
-      },
-    });
+    try {
+      await updateProfile({
+        ...formData,
+        profile_image_url: formData.profile_image_url || null,
+      });
+      toast.success('Profile updated successfully');
+    } catch (error) {
+      console.error('Form submission error:', error);
+      toast.error('Failed to update profile');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (
@@ -82,120 +83,105 @@ export default function ProfileForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleImageChange = (url: string) => {
+    setFormData((prev) => ({ ...prev, profile_image_url: url }));
+    // Immediately update profile after image change
+    updateProfile({
+      ...formData,
+      profile_image_url: url,
+    }).catch((error) => {
+      console.error('Failed to update profile image:', error);
+      toast.error('Failed to update profile image');
+    });
+  };
+
   return (
     <form onSubmit={handleSubmit} className='space-y-6'>
       <ProfileImageUpload
-        imageUrl={formData.profile_image_url || ''}
-        onImageChange={(url) =>
-          setFormData((prev) => ({ ...prev, profile_image_url: url }))
-        }
+        imageUrl={formData.profile_image_url}
+        onImageChange={handleImageChange}
       />
 
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
         <div>
-          <FormLabel htmlFor='email' className='mb-2'>
-            Email
-          </FormLabel>
+          <FormLabel className='mb-2'>Email</FormLabel>
           <Input
-            id='email'
-            name='email'
             type='email'
-            value={formData.email || ''}
-            onChange={handleChange}
-            placeholder='your@email.com'
+            value={user?.email || ''}
+            disabled
+            className='bg-gray-50'
           />
         </div>
 
         <div>
-          <FormLabel htmlFor='phone' className='mb-2'>
-            Phone
-          </FormLabel>
+          <FormLabel className='mb-2'>Phone</FormLabel>
           <Input
-            id='phone'
-            name='phone'
             type='tel'
-            value={formData.phone || ''}
+            name='phone'
+            value={formData.phone}
             onChange={handleChange}
-            placeholder='+1234567890'
+            placeholder='+1 (555) 000-0000'
           />
         </div>
 
         <div>
-          <FormLabel htmlFor='website_url' className='mb-2'>
-            Website
-          </FormLabel>
+          <FormLabel className='mb-2'>Website</FormLabel>
           <Input
-            id='website_url'
+            type='url'
             name='website_url'
-            type='url'
-            value={formData.website_url || ''}
+            value={formData.website_url}
             onChange={handleChange}
-            placeholder='https://yourwebsite.com'
+            placeholder='https://example.com'
           />
         </div>
 
         <div>
-          <FormLabel htmlFor='linkedin_url' className='mb-2'>
-            LinkedIn
-          </FormLabel>
+          <FormLabel className='mb-2'>LinkedIn</FormLabel>
           <Input
-            id='linkedin_url'
+            type='url'
             name='linkedin_url'
-            type='url'
-            value={formData.linkedin_url || ''}
+            value={formData.linkedin_url}
             onChange={handleChange}
-            placeholder='https://linkedin.com/in/yourusername'
+            placeholder='https://linkedin.com/in/username'
           />
         </div>
 
         <div>
-          <FormLabel htmlFor='x_url' className='mb-2'>
-            X (Twitter)
-          </FormLabel>
+          <FormLabel className='mb-2'>X (Twitter)</FormLabel>
           <Input
-            id='x_url'
+            type='url'
             name='x_url'
-            type='url'
-            value={formData.x_url || ''}
+            value={formData.x_url}
             onChange={handleChange}
-            placeholder='https://x.com/yourusername'
+            placeholder='https://x.com/username'
           />
         </div>
 
         <div>
-          <FormLabel htmlFor='github_url' className='mb-2'>
-            GitHub
-          </FormLabel>
+          <FormLabel className='mb-2'>GitHub</FormLabel>
           <Input
-            id='github_url'
-            name='github_url'
             type='url'
-            value={formData.github_url || ''}
+            name='github_url'
+            value={formData.github_url}
             onChange={handleChange}
-            placeholder='https://github.com/yourusername'
-          />
-        </div>
-
-        <div className='md:col-span-2'>
-          <FormLabel htmlFor='description' className='mb-2'>
-            Description
-          </FormLabel>
-          <Input
-            id='description'
-            name='description'
-            value={formData.description || ''}
-            onChange={handleChange}
-            placeholder='Tell us about yourself'
+            placeholder='https://github.com/username'
           />
         </div>
       </div>
 
-      <Button
-        type='submit'
-        disabled={loading}
-        className=' bg-purple-600 hover:bg-purple-700 text-white dark:bg-purple-500 dark:hover:bg-purple-400 dark:text-gray-50 transition-colors'
-      >
-        {loading ? 'Updating...' : 'Update Profile'}
+      <div>
+        <FormLabel className='mb-2'>Description</FormLabel>
+        <TextArea
+          name='description'
+          value={formData.description}
+          onChange={handleChange}
+          placeholder='Tell us about yourself...'
+          rows={4}
+        />
+      </div>
+
+      <Button type='submit' disabled={loading} className='w-full'>
+        {loading ? 'Saving...' : 'Save Changes'}
       </Button>
     </form>
   );

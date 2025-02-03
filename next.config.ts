@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    domains: ['https://hocycivcjajujxsprvfg.supabase.co'], // Replace with your Supabase project domain
+    domains: ['hocycivcjajujxsprvfg.supabase.co'], // Replace with your actual Supabase project domain
   },
 };
 

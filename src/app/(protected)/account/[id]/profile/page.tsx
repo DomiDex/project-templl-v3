@@ -3,7 +3,7 @@
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { Container } from '@/components/ui/container';
 import { Section } from '@/components/ui/section';
-
+import ProfileForm from '@/features/account/profile/components/ProfileForm';
 import { useProfile } from '@/features/account/profile/hooks/useProfile';
 
 export default function Page() {
@@ -13,20 +13,41 @@ export default function Page() {
     { label: 'Profile', href: '/account/profile' },
   ];
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const pageContent = (
+    <div className='max-w-2xl'>
+      <h1 className='text-4xl font-bold text-gray-900 dark:text-gray-50 mb-8'>
+        Profile
+      </h1>
+      <ProfileForm />
+    </div>
+  );
+
+  const loadingSkeleton = (
+    <div className='max-w-2xl animate-pulse'>
+      <div className='h-12 w-48 bg-gray-200 dark:bg-gray-700 rounded mb-8' />
+      <div className='space-y-6'>
+        <div className='h-32 bg-gray-200 dark:bg-gray-700 rounded-lg' />
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+          {[...Array(6)].map((_, i) => (
+            <div key={i}>
+              <div className='h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded mb-2' />
+              <div className='h-10 bg-gray-200 dark:bg-gray-700 rounded' />
+            </div>
+          ))}
+        </div>
+        <div>
+          <div className='h-4 w-20 bg-gray-200 dark:bg-gray-700 rounded mb-2' />
+          <div className='h-24 bg-gray-200 dark:bg-gray-700 rounded' />
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <Section padding='lg'>
       <Container size='lg'>
         <Breadcrumb items={breadcrumbItems} className='mb-6' />
-
-        <div className='max-w-2xl'>
-          <h1 className='text-4xl font-bold text-gray-900 dark:text-gray-50 mb-8'>
-            Profile
-          </h1>
-        </div>
+        {loading ? loadingSkeleton : pageContent}
       </Container>
     </Section>
   );
