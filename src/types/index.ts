@@ -1,17 +1,5 @@
-## To Do List
+import { SupabaseClient } from '@supabase/supabase-js';
 
-- [ ] Add a new project form
-- [ ] Add a new service form
-- [ ] Add a new template form
-- [ ] Add a new profile form
-- [ ] display new project, service, template in the account page
-- [ ] edit project, service, template in the account page
-- [ ] delete project, service, template in the account page
-- [ ] create all the main pages
-
-## Database Types
-
-```typescript
 export type Profile = {
   id: string;
   username: string | null;
@@ -51,4 +39,3 @@ export type SupabaseDatabase = SupabaseClient<Schema>;
 
 // Helper type for form inputs
 export type ProfileFormData = Omit<Profile, 'id' | 'created_at' | 'updated_at'>;
-```
