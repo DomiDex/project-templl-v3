@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { forwardRef, useState } from 'react';
+import { forwardRef, useRef, useState } from 'react';
 import { TextArea } from './TextArea';
 import { Button } from './button';
 import {
@@ -8,7 +8,6 @@ import {
   Bold,
   Italic,
   Strikethrough,
-  Heading1,
   Heading2,
   Heading3,
   Link as LinkIcon,
@@ -17,6 +16,8 @@ import {
   List,
   Quote,
 } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface ToolbarButton {
   icon: React.ElementType;
@@ -29,7 +30,7 @@ const toolbarButtons: ToolbarButton[] = [
   { icon: Bold, name: 'Bold', syntax: '**Bold**' },
   { icon: Italic, name: 'Italic', syntax: '*Italic*' },
   { icon: Strikethrough, name: 'Strikethrough', syntax: '~~Strikethrough~~' },
-  { icon: Heading1, name: 'H1', syntax: '# ', prefix: true },
+
   { icon: Heading2, name: 'H2', syntax: '## ', prefix: true },
   { icon: Heading3, name: 'H3', syntax: '### ', prefix: true },
   { icon: LinkIcon, name: 'Link', syntax: '[Link](url)' },
@@ -57,12 +58,22 @@ const MarkdownEditor = forwardRef<HTMLTextAreaElement, MarkdownEditorProps>(
       onPreviewToggle,
       value,
       onChange,
+      maxLength,
       ...props
     },
-    ref
+    forwardedRef
   ) => {
     const [internalPreview, setInternalPreview] = useState(false);
     const isPreview = controlledPreview ?? internalPreview;
+    const textAreaRef = useRef<HTMLTextAreaElement>(null);
+    const combinedRef = (node: HTMLTextAreaElement) => {
+      textAreaRef.current = node;
+      if (typeof forwardedRef === 'function') {
+        forwardedRef(node);
+      } else if (forwardedRef) {
+        forwardedRef.current = node;
+      }
+    };
 
     const handlePreviewToggle = () => {
       const newPreviewState = !isPreview;
@@ -71,17 +82,15 @@ const MarkdownEditor = forwardRef<HTMLTextAreaElement, MarkdownEditorProps>(
     };
 
     const insertMarkdown = (button: ToolbarButton) => {
-      const textarea = ref as React.RefObject<HTMLTextAreaElement>;
-      if (!textarea.current) return;
+      if (!textAreaRef.current) return;
 
-      const start = textarea.current.selectionStart;
-      const end = textarea.current.selectionEnd;
-      const text = textarea.current.value;
+      const start = textAreaRef.current.selectionStart;
+      const end = textAreaRef.current.selectionEnd;
+      const text = textAreaRef.current.value;
       const selectedText = text.substring(start, end);
 
       let newText;
       if (button.prefix) {
-        // For prefix-based syntax (lists, headings, quotes)
         const lines = selectedText.split('\n');
         const modifiedLines = lines.map((line) => button.syntax + line);
         newText =
@@ -89,7 +98,6 @@ const MarkdownEditor = forwardRef<HTMLTextAreaElement, MarkdownEditorProps>(
           modifiedLines.join('\n') +
           text.substring(end);
       } else {
-        // For wrapper-based syntax (bold, italic, etc.)
         const wrapper = button.syntax.split(button.name);
         newText =
           text.substring(0, start) +
@@ -99,9 +107,9 @@ const MarkdownEditor = forwardRef<HTMLTextAreaElement, MarkdownEditorProps>(
           text.substring(end);
       }
 
-      // Trigger onChange event
       const event = {
         target: {
+          name: textAreaRef.current.name,
           value: newText,
         },
       } as React.ChangeEvent<HTMLTextAreaElement>;
@@ -109,9 +117,30 @@ const MarkdownEditor = forwardRef<HTMLTextAreaElement, MarkdownEditorProps>(
     };
 
     const renderMarkdown = (content: string) => {
-      // Here you would implement markdown parsing
-      // For now, we'll just return the raw content
-      return content;
+      return (
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          className={cn(
+            'prose prose-purple dark:prose-invert max-w-none',
+            'prose-h1:text-2xl prose-h1:font-bold',
+            'prose-h2:text-xl prose-h2:font-bold',
+            'prose-h3:text-lg prose-h3:font-bold',
+            'prose-a:text-purple-600 dark:prose-a:text-purple-400',
+            'prose-a:no-underline hover:prose-a:underline',
+            'prose-ul:list-disc prose-ol:list-decimal',
+            'prose-code:bg-purple-100 prose-code:text-purple-900',
+            'dark:prose-code:bg-purple-900/30 dark:prose-code:text-purple-300',
+            'prose-code:rounded prose-code:px-1',
+            'prose-blockquote:border-l-4 prose-blockquote:border-purple-500',
+            'prose-blockquote:pl-4 prose-blockquote:italic',
+            'prose-table:border-collapse prose-td:border prose-th:border',
+            'prose-td:px-3 prose-td:py-2 prose-th:px-3 prose-th:py-2',
+            'prose-th:bg-purple-100 dark:prose-th:bg-purple-900/30'
+          )}
+        >
+          {content}
+        </ReactMarkdown>
+      );
     };
 
     return (
@@ -176,10 +205,11 @@ const MarkdownEditor = forwardRef<HTMLTextAreaElement, MarkdownEditorProps>(
             </div>
           ) : (
             <TextArea
-              ref={ref}
+              ref={combinedRef}
               error={error}
               value={value}
               onChange={onChange}
+              maxLength={maxLength}
               {...props}
             />
           )}

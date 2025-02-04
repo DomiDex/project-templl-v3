@@ -37,7 +37,11 @@ export function DataSelect<T extends keyof Tables>({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let query = supabase.from(table).select('*');
+        let query = supabase
+          .from(table)
+          .select(
+            `${String(column)}, ${String(labelColumn)}, ${String(valueColumn)}`
+          );
 
         if (filter) {
           query = query.eq(String(filter.column), filter.value);
@@ -46,8 +50,6 @@ export function DataSelect<T extends keyof Tables>({
         const { data, error } = await query;
 
         if (error) throw error;
-        if (!data) return;
-
         setOptions(data as Tables[T]['Row'][]);
       } catch (error) {
         console.error(`Error fetching ${table}:`, error);
