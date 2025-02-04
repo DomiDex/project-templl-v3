@@ -50,6 +50,7 @@ export interface Template extends BaseEntity {
   stack_id: string | null;
   user_id: string;
   featured: boolean;
+  price: number;
   template_link: string | null;
   meta_title: string | null;
   meta_description: string | null;
