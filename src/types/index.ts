@@ -73,10 +73,8 @@ export interface Project extends BaseEntity {
 export interface Service extends BaseEntity {
   service_name: string;
   path: string;
-  stack_id: string | null;
+  stack_id: string;
   user_id: string;
-  project_id: string | null;
-  template_id: string | null;
   featured: boolean;
   price: number;
   meta_title: string | null;
