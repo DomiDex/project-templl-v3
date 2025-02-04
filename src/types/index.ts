@@ -104,7 +104,10 @@ export type Tables = {
   };
   stacks: {
     Row: Stack;
-    Insert: Omit<Stack, 'id' | 'created_at' | 'updated_at' | 'path'>;
+    Insert: Omit<Stack, 'id' | 'created_at' | 'updated_at'> & {
+      path?: string;
+      stack_name: string;
+    };
     Update: Partial<Omit<Stack, 'id' | 'path'>>;
   };
   categories: {
@@ -149,14 +152,29 @@ export type SupabaseDatabase = SupabaseClient<Schema>;
 
 // Helper types for database results
 export type DbResult<T> = T extends PromiseLike<infer U> ? U : never;
-export type DbResultOk<T> = T extends PromiseLike<{ data: infer U }> 
-  ? Exclude<U, null> 
+export type DbResultOk<T> = T extends PromiseLike<{ data: infer U }>
+  ? Exclude<U, null>
   : never;
 
 // Helper types for form inputs
 export type ProfileFormData = Omit<Profile, 'id' | 'created_at' | 'updated_at'>;
-export type StackFormData = Omit<Stack, 'id' | 'created_at' | 'updated_at' | 'path'>;
-export type CategoryFormData = Omit<Category, 'id' | 'created_at' | 'updated_at' | 'path'>;
-export type TemplateFormData = Omit<Template, 'id' | 'created_at' | 'updated_at' | 'path'>;
-export type ProjectFormData = Omit<Project, 'id' | 'created_at' | 'updated_at' | 'path'>;
-export type ServiceFormData = Omit<Service, 'id' | 'created_at' | 'updated_at' | 'path'>;
+export type StackFormData = Omit<
+  Stack,
+  'id' | 'created_at' | 'updated_at' | 'path'
+>;
+export type CategoryFormData = Omit<
+  Category,
+  'id' | 'created_at' | 'updated_at' | 'path'
+>;
+export type TemplateFormData = Omit<
+  Template,
+  'id' | 'created_at' | 'updated_at' | 'path'
+>;
+export type ProjectFormData = Omit<
+  Project,
+  'id' | 'created_at' | 'updated_at' | 'path'
+>;
+export type ServiceFormData = Omit<
+  Service,
+  'id' | 'created_at' | 'updated_at' | 'path'
+>;
