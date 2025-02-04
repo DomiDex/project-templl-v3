@@ -177,6 +177,9 @@ export default function ProfileForm() {
           onChange={handleChange}
           placeholder='Tell us about yourself...'
           rows={4}
+          maxCharacters={500}
+          showCharacterCount
+          helperText="Describe your experience, skills, and what you're working on"
         />
       </div>
 
