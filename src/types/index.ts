@@ -20,6 +20,7 @@ export type Profile = {
   linkedin_url: string | null;
   x_url: string | null;
   github_url: string | null;
+  isPro: boolean;
   updated_at: string;
   created_at: string;
 };
