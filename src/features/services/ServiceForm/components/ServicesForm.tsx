@@ -21,6 +21,7 @@ export default function ServicesForm() {
     loading: countLoading,
     serviceCount,
     totalLimit,
+    isPro,
   } = useServiceCount();
   const [formData, setFormData] = useState({
     service_name: '',
@@ -89,44 +90,59 @@ export default function ServicesForm() {
     }
   };
 
-  return (
-    <form onSubmit={handleSubmit} className='space-y-6'>
-      {!countLoading && (
-        <div
-          className={cn(
-            'p-4 rounded-md mb-6',
-            canPublishMore
-              ? 'bg-purple-50 dark:bg-purple-900/20'
-              : 'bg-error-light/10 dark:bg-error-dark/20'
-          )}
-        >
-          <div className='flex justify-between items-center mb-2'>
-            <p className='text-sm'>
-              {canPublishMore
-                ? `You can publish ${remainingServices} more service${
-                    remainingServices === 1 ? '' : 's'
-                  }`
-                : 'You have reached the maximum limit of 3 services'}
-            </p>
-            <span className='text-sm font-medium'>
-              {Math.min(serviceCount, totalLimit)}/{totalLimit} services
-            </span>
-          </div>
-          <div className='w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2'>
-            <div
-              className={cn(
-                'h-2 rounded-full transition-all duration-300',
-                canPublishMore
-                  ? 'bg-purple-600 dark:bg-purple-400'
-                  : 'bg-error-light dark:bg-error-dark'
-              )}
-              style={{
-                width: `${Math.min((serviceCount / totalLimit) * 100, 100)}%`,
-              }}
-            />
+  const CountDisplay = () => {
+    if (isPro) {
+      return (
+        <div className='p-4 rounded-md mb-6 bg-success-light/10 dark:bg-success-dark/20'>
+          <div className='flex justify-between items-center'>
+            <p className='text-sm'>You have unlimited services (Pro Plan)</p>
+            <span className='text-sm font-medium'>∞</span>
           </div>
         </div>
-      )}
+      );
+    }
+
+    return (
+      <div
+        className={cn(
+          'p-4 rounded-md mb-6',
+          canPublishMore
+            ? 'bg-purple-50 dark:bg-purple-900/20'
+            : 'bg-error-light/10 dark:bg-error-dark/20'
+        )}
+      >
+        <div className='flex justify-between items-center mb-2'>
+          <p className='text-sm'>
+            {canPublishMore
+              ? `You can publish ${remainingServices} more service${
+                  remainingServices === 1 ? '' : 's'
+                }`
+              : 'You have reached the maximum limit of 3 services'}
+          </p>
+          <span className='text-sm font-medium'>
+            {Math.min(serviceCount, totalLimit)}/{totalLimit} services
+          </span>
+        </div>
+        <div className='w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2'>
+          <div
+            className={cn(
+              'h-2 rounded-full transition-all duration-300',
+              canPublishMore
+                ? 'bg-purple-600 dark:bg-purple-400'
+                : 'bg-error-light dark:bg-error-dark'
+            )}
+            style={{
+              width: `${Math.min((serviceCount / totalLimit) * 100, 100)}%`,
+            }}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className='space-y-6'>
+      {!countLoading && <CountDisplay />}
 
       <ImageUpload
         imageUrl={formData.og_image_url}

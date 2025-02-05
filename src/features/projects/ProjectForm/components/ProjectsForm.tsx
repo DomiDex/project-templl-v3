@@ -21,6 +21,7 @@ export default function ProjectsForm() {
     loading: countLoading,
     projectCount,
     totalLimit,
+    isPro,
   } = useProjectCount();
   const [formData, setFormData] = useState({
     project_name: '',
@@ -77,33 +78,59 @@ export default function ProjectsForm() {
     }
   };
 
+  const CountDisplay = () => {
+    if (isPro) {
+      return (
+        <div className='p-4 rounded-md mb-6 bg-success-light/10 dark:bg-success-dark/20'>
+          <div className='flex justify-between items-center'>
+            <p className='text-sm'>You have unlimited projects (Pro Plan)</p>
+            <span className='text-sm font-medium'>∞</span>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div
+        className={cn(
+          'p-4 rounded-md mb-6',
+          canPublishMore
+            ? 'bg-purple-50 dark:bg-purple-900/20'
+            : 'bg-error-light/10 dark:bg-error-dark/20'
+        )}
+      >
+        <div className='flex justify-between items-center mb-2'>
+          <p className='text-sm'>
+            {canPublishMore
+              ? `You can publish ${remainingProjects} more project${
+                  remainingProjects === 1 ? '' : 's'
+                }`
+              : 'You have reached the maximum limit of 3 projects'}
+          </p>
+          <span className='text-sm font-medium'>
+            {Math.min(projectCount, totalLimit)}/{totalLimit} projects
+          </span>
+        </div>
+        <div className='w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2'>
+          <div
+            className={cn(
+              'h-2 rounded-full transition-all duration-300',
+              canPublishMore
+                ? 'bg-purple-600 dark:bg-purple-400'
+                : 'bg-error-light dark:bg-error-dark'
+            )}
+            style={{
+              width: `${Math.min((projectCount / totalLimit) * 100, 100)}%`,
+            }}
+          />
+        </div>
+      </div>
+    );
+  };
+
   return (
     <form onSubmit={handleSubmit} className='space-y-6'>
-      <div className='flex justify-between items-center mb-2'>
-        <p className='text-sm'>
-          {canPublishMore
-            ? `You can publish ${remainingProjects} more project${
-                remainingProjects === 1 ? '' : 's'
-              }`
-            : 'You have reached the maximum limit of 3 projects'}
-        </p>
-        <span className='text-sm font-medium'>
-          {Math.min(projectCount, totalLimit)}/{totalLimit} projects
-        </span>
-      </div>
-      <div className='w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2'>
-        <div
-          className={cn(
-            'h-2 rounded-full transition-all duration-300',
-            canPublishMore
-              ? 'bg-purple-600 dark:bg-purple-400'
-              : 'bg-error-light dark:bg-error-dark'
-          )}
-          style={{
-            width: `${Math.min((projectCount / totalLimit) * 100, 100)}%`,
-          }}
-        />
-      </div>
+      {!countLoading && <CountDisplay />}
       <ImageUpload
         imageUrl={formData.og_image_url}
         onImageChange={handleImageChange}
@@ -184,17 +211,6 @@ export default function ProjectsForm() {
           showCharacterCount
         />
       </div>
-
-      {!countLoading && (
-        <div
-          className={cn(
-            'p-4 rounded-md mb-6',
-            canPublishMore
-              ? 'bg-purple-50 dark:bg-purple-900/20'
-              : 'bg-error-light/10 dark:bg-error-dark/20'
-          )}
-        ></div>
-      )}
 
       <Button type='submit' disabled={loading} className='w-full'>
         {loading ? 'Creating...' : 'Create Project'}
