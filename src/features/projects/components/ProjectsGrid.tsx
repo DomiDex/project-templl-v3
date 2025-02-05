@@ -5,6 +5,7 @@ import { createClient } from '@/utils/supabase/client';
 import ProjectAccountCard from './ProjectAccountCard';
 import { toast } from 'sonner';
 import Link from 'next/link';
+import EditProjectModal from './EditProjectModal';
 
 interface Project {
   id: string;
@@ -35,6 +36,8 @@ export default function ProjectsGrid({ userId }: ProjectsGridProps) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -79,9 +82,22 @@ export default function ProjectsGrid({ userId }: ProjectsGridProps) {
     fetchProjects();
   }, [userId, supabase]);
 
-  const handleEdit = (project: Project) => {
-    // Implement edit functionality
-    console.log('Edit project:', project);
+  const handleEdit = async (project: Project) => {
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('id', project.id)
+        .single();
+
+      if (error) throw error;
+
+      setSelectedProject(data);
+      setIsEditModalOpen(true);
+    } catch (error) {
+      console.error('Error fetching project details:', error);
+      toast.error('Failed to load project details');
+    }
   };
 
   const handleDelete = async (projectId: string) => {
@@ -152,15 +168,27 @@ export default function ProjectsGrid({ userId }: ProjectsGridProps) {
   }
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-      {projects.map((project) => (
-        <ProjectAccountCard
-          key={project.id}
-          project={project}
-          onEdit={() => handleEdit(project)}
-          onDelete={() => handleDelete(project.id)}
+    <>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+        {projects.map((project) => (
+          <ProjectAccountCard
+            key={project.id}
+            project={project}
+            onEdit={() => handleEdit(project)}
+            onDelete={() => handleDelete(project.id)}
+          />
+        ))}
+      </div>
+      {selectedProject && (
+        <EditProjectModal
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setSelectedProject(null);
+          }}
+          project={selectedProject}
         />
-      ))}
-    </div>
+      )}
+    </>
   );
 }

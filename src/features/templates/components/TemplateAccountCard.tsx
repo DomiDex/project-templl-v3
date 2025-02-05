@@ -56,7 +56,7 @@ export default function TemplateAccountCard({
         className={cn(
           'absolute bottom-0 left-0 w-full h-full flex flex-col justify-center items-center',
           'translate-y-full group-hover:translate-y-0 transition-all duration-200',
-          'rounded-md gap-2'
+          'rounded-md gap-2 backdrop-blur-sm bg-gray-50/30 dark:bg-gray-900/30'
         )}
       >
         <button

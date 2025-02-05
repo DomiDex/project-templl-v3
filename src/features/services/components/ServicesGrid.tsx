@@ -5,6 +5,7 @@ import { createClient } from '@/utils/supabase/client';
 import ServiceAccountCard from '@/features/services/components/ServiceAccountCard';
 import { toast } from 'sonner';
 import Link from 'next/link';
+import EditServiceModal from './EditServiceModal';
 
 interface Service {
   id: string;
@@ -36,6 +37,8 @@ interface ServiceResponse {
 export default function ServicesGrid({ userId }: ServicesGridProps) {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState(null);
   const supabase = createClient();
 
   useEffect(() => {
@@ -85,8 +88,22 @@ export default function ServicesGrid({ userId }: ServicesGridProps) {
     fetchServices();
   }, [userId, supabase]);
 
-  const handleEdit = (service: Service) => {
-    console.log('Edit service:', service);
+  const handleEdit = async (service: Service) => {
+    try {
+      const { data, error } = await supabase
+        .from('services')
+        .select('*')
+        .eq('id', service.id)
+        .single();
+
+      if (error) throw error;
+
+      setSelectedService(data);
+      setIsEditModalOpen(true);
+    } catch (error) {
+      console.error('Error fetching service details:', error);
+      toast.error('Failed to load service details');
+    }
   };
 
   const handleDelete = async (serviceId: string) => {
@@ -156,15 +173,27 @@ export default function ServicesGrid({ userId }: ServicesGridProps) {
   }
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-      {services.map((service) => (
-        <ServiceAccountCard
-          key={service.id}
-          service={service}
-          onEdit={() => handleEdit(service)}
-          onDelete={() => handleDelete(service.id)}
+    <>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+        {services.map((service) => (
+          <ServiceAccountCard
+            key={service.id}
+            service={service}
+            onEdit={() => handleEdit(service)}
+            onDelete={() => handleDelete(service.id)}
+          />
+        ))}
+      </div>
+      {selectedService && (
+        <EditServiceModal
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setSelectedService(null);
+          }}
+          service={selectedService}
         />
-      ))}
-    </div>
+      )}
+    </>
   );
 }

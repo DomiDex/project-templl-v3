@@ -5,6 +5,7 @@ import { createClient } from '@/utils/supabase/client';
 import TemplateAccountCard from './TemplateAccountCard';
 import { toast } from 'sonner';
 import Link from 'next/link';
+import EditTemplateModal from './EditTemplateModal';
 
 interface Template {
   id: string;
@@ -25,6 +26,12 @@ interface TemplateResponse {
   thumbnail_image_url: string | null;
   price: number;
   stack_id: string;
+  category_id: string;
+  template_link: string | null;
+  meta_title: string | null;
+  meta_description: string | null;
+  long_description: string | null;
+  og_image_url: string | null;
   stacks: {
     stack_name: string;
   } | null;
@@ -37,6 +44,8 @@ export default function TemplatesGrid({ userId }: TemplatesGridProps) {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
 
   useEffect(() => {
     const fetchTemplates = async () => {
@@ -86,8 +95,27 @@ export default function TemplatesGrid({ userId }: TemplatesGridProps) {
     fetchTemplates();
   }, [userId, supabase]);
 
-  const handleEdit = (template: Template) => {
-    console.log('Edit template:', template);
+  const handleEdit = async (template: Template) => {
+    try {
+      const { data, error } = await supabase
+        .from('templates')
+        .select('*')
+        .eq('id', template.id)
+        .single();
+
+      if (error) throw error;
+
+      setSelectedTemplate(data);
+      setIsEditModalOpen(true);
+    } catch (error) {
+      console.error('Error fetching template details:', error);
+      toast.error('Failed to load template details');
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedTemplate(null);
   };
 
   const handleDelete = async (templateId: string) => {
@@ -157,15 +185,24 @@ export default function TemplatesGrid({ userId }: TemplatesGridProps) {
   }
 
   return (
-    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
-      {templates.map((template) => (
-        <TemplateAccountCard
-          key={template.id}
-          template={template}
-          onEdit={() => handleEdit(template)}
-          onDelete={() => handleDelete(template.id)}
+    <>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
+        {templates.map((template) => (
+          <TemplateAccountCard
+            key={template.id}
+            template={template}
+            onEdit={() => handleEdit(template)}
+            onDelete={() => handleDelete(template.id)}
+          />
+        ))}
+      </div>
+      {selectedTemplate && (
+        <EditTemplateModal
+          isOpen={isEditModalOpen}
+          onClose={handleCloseModal}
+          template={selectedTemplate}
         />
-      ))}
-    </div>
+      )}
+    </>
   );
 }
