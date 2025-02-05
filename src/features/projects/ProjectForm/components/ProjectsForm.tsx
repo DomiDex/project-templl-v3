@@ -79,6 +79,31 @@ export default function ProjectsForm() {
 
   return (
     <form onSubmit={handleSubmit} className='space-y-6'>
+      <div className='flex justify-between items-center mb-2'>
+        <p className='text-sm'>
+          {canPublishMore
+            ? `You can publish ${remainingProjects} more project${
+                remainingProjects === 1 ? '' : 's'
+              }`
+            : 'You have reached the maximum limit of 3 projects'}
+        </p>
+        <span className='text-sm font-medium'>
+          {Math.min(projectCount, totalLimit)}/{totalLimit} projects
+        </span>
+      </div>
+      <div className='w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2'>
+        <div
+          className={cn(
+            'h-2 rounded-full transition-all duration-300',
+            canPublishMore
+              ? 'bg-purple-600 dark:bg-purple-400'
+              : 'bg-error-light dark:bg-error-dark'
+          )}
+          style={{
+            width: `${Math.min((projectCount / totalLimit) * 100, 100)}%`,
+          }}
+        />
+      </div>
       <ImageUpload
         imageUrl={formData.og_image_url}
         onImageChange={handleImageChange}
@@ -168,33 +193,7 @@ export default function ProjectsForm() {
               ? 'bg-purple-50 dark:bg-purple-900/20'
               : 'bg-error-light/10 dark:bg-error-dark/20'
           )}
-        >
-          <div className='flex justify-between items-center mb-2'>
-            <p className='text-sm'>
-              {canPublishMore
-                ? `You can publish ${remainingProjects} more project${
-                    remainingProjects === 1 ? '' : 's'
-                  }`
-                : 'You have reached the maximum limit of 3 projects'}
-            </p>
-            <span className='text-sm font-medium'>
-              {Math.min(projectCount, totalLimit)}/{totalLimit} projects
-            </span>
-          </div>
-          <div className='w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2'>
-            <div
-              className={cn(
-                'h-2 rounded-full transition-all duration-300',
-                canPublishMore
-                  ? 'bg-purple-600 dark:bg-purple-400'
-                  : 'bg-error-light dark:bg-error-dark'
-              )}
-              style={{
-                width: `${Math.min((projectCount / totalLimit) * 100, 100)}%`,
-              }}
-            />
-          </div>
-        </div>
+        ></div>
       )}
 
       <Button type='submit' disabled={loading} className='w-full'>
