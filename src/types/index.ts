@@ -46,10 +46,9 @@ export interface Category extends BaseEntity {
 export interface Template extends BaseEntity {
   template_name: string;
   path: string;
-  category_id: string | null;
+  category_id: string;
   stack_id: string | null;
   user_id: string;
-  featured: boolean;
   price: number;
   template_link: string | null;
   meta_title: string | null;
@@ -57,6 +56,7 @@ export interface Template extends BaseEntity {
   long_description: string | null;
   og_image_url: string | null;
   thumbnail_image_url: string | null;
+  featured: boolean;
 }
 
 export interface Project extends BaseEntity {
@@ -116,8 +116,8 @@ export type Tables = {
   };
   templates: {
     Row: Template;
-    Insert: Omit<Template, 'id' | 'created_at' | 'updated_at' | 'path'>;
-    Update: Partial<Omit<Template, 'id' | 'path'>>;
+    Insert: Omit<Template, 'id' | 'created_at' | 'updated_at'>;
+    Update: Partial<Omit<Template, 'id'>>;
   };
   projects: {
     Row: Project;

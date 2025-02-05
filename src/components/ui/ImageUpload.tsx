@@ -14,6 +14,7 @@ interface ImageUploadProps {
   helperText?: string;
   bucket?: string;
   className?: string;
+  id?: string;
 }
 
 const MAX_FILE_SIZE = 300 * 1024; // 300KB in bytes
@@ -25,6 +26,7 @@ export function ImageUpload({
   helperText = 'PNG, JPG or WebP (MAX. 300KB)',
   bucket = 'service-images',
   className,
+  id = 'image-upload',
 }: ImageUploadProps) {
   const { user } = useAuthStore();
   const supabase = createClient();
@@ -97,7 +99,7 @@ export function ImageUpload({
 
       <div className='flex items-center justify-center w-full'>
         <label
-          htmlFor='image-upload'
+          htmlFor={id}
           className={cn(
             imageUrl
               ? 'hidden'
@@ -121,7 +123,7 @@ export function ImageUpload({
             </p>
           </div>
           <input
-            id='image-upload'
+            id={id}
             type='file'
             accept='image/*'
             className='hidden'

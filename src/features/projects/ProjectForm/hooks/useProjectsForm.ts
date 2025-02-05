@@ -3,16 +3,22 @@ import { createClient } from '@/utils/supabase/client';
 import { ProjectFormData } from '@/types';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { generateSlug } from '@/lib/utils';
+import { useProjectCount } from '../../hooks/useProjectCount';
 
 export function useProjectsForm() {
   const [loading, setLoading] = useState(false);
   const { user } = useAuthStore();
+  const { canPublishMore } = useProjectCount();
   const supabase = createClient();
 
   const createProject = async (
     data: Omit<ProjectFormData, 'user_id' | 'path'>
   ) => {
     if (!user) throw new Error('User not authenticated');
+    if (!canPublishMore) {
+      throw new Error('You have reached the maximum limit of 3 projects');
+    }
+
     setLoading(true);
 
     try {
