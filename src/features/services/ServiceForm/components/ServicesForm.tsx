@@ -10,9 +10,18 @@ import { ImageUpload } from '@/components/ui/ImageUpload';
 import { useServicesForm } from '../hooks/useServicesForm';
 import { toast } from 'sonner';
 import { MarkdownEditor } from '@/components/ui/MarkdownEditor';
+import { useServiceCount } from '../../hooks/useServiceCount';
+import { cn } from '@/lib/utils';
 
 export default function ServicesForm() {
   const { createService, loading } = useServicesForm();
+  const {
+    canPublishMore,
+    remainingServices,
+    loading: countLoading,
+    serviceCount,
+    totalLimit,
+  } = useServiceCount();
   const [formData, setFormData] = useState({
     service_name: '',
     stack_id: '',
@@ -79,6 +88,45 @@ export default function ServicesForm() {
       );
     }
   };
+
+  {
+    !countLoading && (
+      <div
+        className={cn(
+          'p-4 rounded-md mb-6',
+          canPublishMore
+            ? 'bg-purple-50 dark:bg-purple-900/20'
+            : 'bg-error-light/10 dark:bg-error-dark/20'
+        )}
+      >
+        <div className='flex justify-between items-center mb-2'>
+          <p className='text-sm'>
+            {canPublishMore
+              ? `You can publish ${remainingServices} more service${
+                  remainingServices === 1 ? '' : 's'
+                }`
+              : 'You have reached the maximum limit of 3 services'}
+          </p>
+          <span className='text-sm font-medium'>
+            {Math.min(serviceCount, totalLimit)}/{totalLimit} services
+          </span>
+        </div>
+        <div className='w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2'>
+          <div
+            className={cn(
+              'h-2 rounded-full transition-all duration-300',
+              canPublishMore
+                ? 'bg-purple-600 dark:bg-purple-400'
+                : 'bg-error-light dark:bg-error-dark'
+            )}
+            style={{
+              width: `${Math.min((serviceCount / totalLimit) * 100, 100)}%`,
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className='space-y-6'>
@@ -172,8 +220,16 @@ export default function ServicesForm() {
         />
       </div>
 
-      <Button type='submit' disabled={loading} className='w-full'>
-        {loading ? 'Creating...' : 'Create Service'}
+      <Button
+        type='submit'
+        disabled={loading || !canPublishMore}
+        className='w-full'
+      >
+        {loading
+          ? 'Creating...'
+          : !canPublishMore
+          ? 'Service Limit Reached'
+          : 'Create Service'}
       </Button>
     </form>
   );

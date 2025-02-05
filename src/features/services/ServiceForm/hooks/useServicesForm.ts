@@ -3,16 +3,22 @@ import { createClient } from '@/utils/supabase/client';
 import { ServiceFormData } from '@/types';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { generateSlug } from '@/lib/utils';
+import { useServiceCount } from '../../hooks/useServiceCount';
 
 export function useServicesForm() {
   const [loading, setLoading] = useState(false);
   const { user } = useAuthStore();
+  const { canPublishMore } = useServiceCount();
   const supabase = createClient();
 
   const createService = async (
     data: Omit<ServiceFormData, 'user_id' | 'path'>
   ) => {
     if (!user) throw new Error('User not authenticated');
+    if (!canPublishMore) {
+      throw new Error('You have reached the maximum limit of 3 services');
+    }
+
     setLoading(true);
 
     try {
