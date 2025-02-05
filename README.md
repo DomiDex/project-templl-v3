@@ -1,9 +1,9 @@
 ## To Do List
 
-- [ ] Add a new project form
-- [ ] Add a new service form
-- [ ] Add a new template form
-- [ ] Add a new profile form
+- [*] Add a new project form
+- [*] Add a new service form
+- [*] Add a new template form
+- [*] Add a new profile form
 - [ ] display new project, service, template in the account page
 - [ ] edit project, service, template in the account page
 - [ ] delete project, service, template in the account page
@@ -52,3 +52,12 @@ export type SupabaseDatabase = SupabaseClient<Schema>;
 // Helper type for form inputs
 export type ProfileFormData = Omit<Profile, 'id' | 'created_at' | 'updated_at'>;
 ```
+
+when using the service count, make sure to check if the user is pro or not.
+if the user is pro, then the service count should be unlimited.
+if the user is not pro, then the service count should be limited to the service limit.
+set the service count to the service limit if the user is not pro.
+change the text to the following:
+You can publish 2 more projects
+
+1/3 projects
