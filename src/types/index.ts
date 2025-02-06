@@ -95,6 +95,22 @@ export interface ServiceCount extends BaseEntity {
   service_count: number;
 }
 
+export interface Skill extends BaseEntity {
+  name: string;
+  category: string | null;
+}
+
+export interface UserSkill extends BaseEntity {
+  user_id: string;
+  skill_id: string;
+  display_order: number;
+  endorsement_count: number;
+  skills?: {
+    name: string;
+    category: string | null;
+  };
+}
+
 // Database schema types
 export type Tables = {
   profiles: {
@@ -140,6 +156,16 @@ export type Tables = {
     Insert: Omit<ServiceCount, 'id' | 'created_at' | 'updated_at'>;
     Update: Partial<Omit<ServiceCount, 'id'>>;
   };
+  skills: {
+    Row: Skill;
+    Insert: Omit<Skill, 'id' | 'created_at' | 'updated_at'>;
+    Update: Partial<Omit<Skill, 'id'>>;
+  };
+  user_skills: {
+    Row: UserSkill;
+    Insert: Omit<UserSkill, 'id' | 'created_at' | 'updated_at'>;
+    Update: Partial<Omit<UserSkill, 'id'>>;
+  };
 };
 
 export type Schema = {
@@ -178,3 +204,4 @@ export type ServiceFormData = Omit<
   Service,
   'id' | 'created_at' | 'updated_at' | 'path'
 >;
+export type SkillFormData = Omit<Skill, 'id' | 'created_at' | 'updated_at'>;
