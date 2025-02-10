@@ -1,53 +1,60 @@
+'use client';
+
 import { Logo } from '@/components/ui/logo';
-import { MainNav } from './Navigation/MainNav';
 import { ThemeSwitch } from '@/features/theme/components/theme-switch';
 import SignInSystem from '@/features/auth/components/SignInSystem';
 import Link from 'next/link';
 import { NavigationItem } from './Navigation/MainNav';
+import { useEffect, useState } from 'react';
+import { createClient } from '@/utils/supabase/client';
+import { Stack, Category } from '@/types';
+import { MegaMenuDropdown } from './Navigation/MegaMenuDropdown';
+import { MobileNav } from './Navigation/MobileNav';
 
 export default function MainHeader() {
+  const [stacks, setStacks] = useState<Pick<Stack, 'id' | 'stack_name'>[]>([]);
+  const [categories, setCategories] = useState<
+    Pick<Category, 'id' | 'category_name'>[]
+  >([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [stacksResponse, categoriesResponse] = await Promise.all([
+          supabase.from('stacks').select('id, stack_name').order('stack_name'),
+          supabase
+            .from('categories')
+            .select('id, category_name')
+            .order('category_name'),
+        ]);
+
+        if (stacksResponse.data) {
+          setStacks(stacksResponse.data);
+        }
+
+        if (categoriesResponse.data) {
+          setCategories(categoriesResponse.data);
+        }
+      } catch (error) {
+        console.error('Error fetching navigation data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const navigationItems: NavigationItem[] = [
     {
       label: 'Templates',
-      items: [
-        {
-          label: 'Webflow',
-          href: '/templates/webflow',
-        },
-        {
-          label: 'Framer',
-          href: '/templates/framer',
-        },
-        {
-          label: 'Next.js',
-          href: '/templates/nextjs',
-        },
-      ],
+      href: '/templates',
     },
     {
       label: 'Services',
       href: '/services',
-    },
-    {
-      label: 'Projects',
-      href: '/projects',
-    },
-    {
-      label: 'Resources',
-      items: [
-        {
-          label: 'Blog',
-          href: '/blog',
-        },
-        {
-          label: 'Documentation',
-          href: '/docs',
-        },
-        {
-          label: 'Support',
-          href: '/support',
-        },
-      ],
     },
   ];
 
@@ -57,7 +64,63 @@ export default function MainHeader() {
         <Link href='/' className='mr-6'>
           <Logo width={90} height={30} />
         </Link>
-        <MainNav items={navigationItems} />
+        <div className='flex gap-6 md:gap-10'>
+          <nav className='hidden lg:flex gap-6 items-center'>
+            {navigationItems.map((item, index) => (
+              <Link
+                key={index}
+                href={item.href!}
+                className='flex items-center text-base font-medium transition-colors hover:text-foreground/80 text-foreground/60'
+              >
+                {item.label}
+              </Link>
+            ))}
+            {!isLoading && (
+              <>
+                <MegaMenuDropdown
+                  label='Stacks'
+                  items={stacks.map((stack) => ({
+                    label: stack.stack_name,
+                    href: `/stacks/${stack.id}`,
+                  }))}
+                  description='Explore our curated collection of technology stacks'
+                />
+                <MegaMenuDropdown
+                  label='Categories'
+                  items={categories.map((category) => ({
+                    label: category.category_name,
+                    href: `/categories/${category.id}`,
+                  }))}
+                  description='Browse templates by category'
+                  columns={4}
+                />
+              </>
+            )}
+          </nav>
+          <MobileNav
+            items={[
+              ...navigationItems,
+              {
+                label: 'Stacks',
+                items: isLoading
+                  ? []
+                  : stacks.map((stack) => ({
+                      label: stack.stack_name,
+                      href: `/stacks/${stack.id}`,
+                    })),
+              },
+              {
+                label: 'Categories',
+                items: isLoading
+                  ? []
+                  : categories.map((category) => ({
+                      label: category.category_name,
+                      href: `/categories/${category.id}`,
+                    })),
+              },
+            ]}
+          />
+        </div>
         <div className='ml-auto flex items-center gap-2'>
           <ThemeSwitch />
           <SignInSystem />
