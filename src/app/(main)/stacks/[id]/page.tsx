@@ -65,14 +65,32 @@ export default function StackDetailPage() {
 
   useEffect(() => {
     const fetchStackData = async () => {
+      if (!stackId) return;
+
       try {
+        // Fetch stack with specific fields
         const { data: stackData, error: stackError } = await supabase
           .from('stacks')
-          .select('*')
+          .select(
+            `
+            id,
+            stack_name,
+            path,
+            meta_description,
+            long_description,
+            icon,
+            og_image
+          `
+          )
           .eq('path', stackId)
           .single();
 
-        if (stackError) throw stackError;
+        if (stackError) {
+          console.error('Stack fetch error:', stackError);
+          toast.error('Failed to load stack');
+          return;
+        }
+
         setStack(stackData);
 
         // Fetch templates for this stack
@@ -150,10 +168,8 @@ export default function StackDetailPage() {
       }
     };
 
-    if (stackId) {
-      fetchStackData();
-    }
-  }, [supabase, stackId]);
+    fetchStackData();
+  }, [stackId, supabase]);
 
   const breadcrumbItems = [
     { label: 'Stacks', href: '/stacks' },

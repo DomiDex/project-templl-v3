@@ -12,9 +12,11 @@ import { MegaMenuDropdown } from './Navigation/MegaMenuDropdown';
 import { MobileNav } from './Navigation/MobileNav';
 
 export default function MainHeader() {
-  const [stacks, setStacks] = useState<Pick<Stack, 'id' | 'stack_name'>[]>([]);
+  const [stacks, setStacks] = useState<
+    Pick<Stack, 'id' | 'stack_name' | 'path'>[]
+  >([]);
   const [categories, setCategories] = useState<
-    Pick<Category, 'id' | 'category_name'>[]
+    Pick<Category, 'id' | 'category_name' | 'path'>[]
   >([]);
   const [isLoading, setIsLoading] = useState(true);
   const supabase = createClient();
@@ -23,10 +25,13 @@ export default function MainHeader() {
     const fetchData = async () => {
       try {
         const [stacksResponse, categoriesResponse] = await Promise.all([
-          supabase.from('stacks').select('id, stack_name').order('stack_name'),
+          supabase
+            .from('stacks')
+            .select('id, stack_name, path')
+            .order('stack_name'),
           supabase
             .from('categories')
-            .select('id, category_name')
+            .select('id, category_name, path')
             .order('category_name'),
         ]);
 
@@ -81,7 +86,7 @@ export default function MainHeader() {
                   label='Stacks'
                   items={stacks.map((stack) => ({
                     label: stack.stack_name,
-                    href: `/stacks/${stack.id}`,
+                    href: `/stacks/${stack.path}`,
                   }))}
                   description='Explore our curated collection of technology stacks'
                 />
@@ -89,7 +94,7 @@ export default function MainHeader() {
                   label='Categories'
                   items={categories.map((category) => ({
                     label: category.category_name,
-                    href: `/categories/${category.id}`,
+                    href: `/categories/${category.path}`,
                   }))}
                   description='Browse templates by category'
                   columns={4}
@@ -106,7 +111,7 @@ export default function MainHeader() {
                   ? []
                   : stacks.map((stack) => ({
                       label: stack.stack_name,
-                      href: `/stacks/${stack.id}`,
+                      href: `/stacks/${stack.path}`,
                     })),
               },
               {
@@ -115,7 +120,7 @@ export default function MainHeader() {
                   ? []
                   : categories.map((category) => ({
                       label: category.category_name,
-                      href: `/categories/${category.id}`,
+                      href: `/categories/${category.path}`,
                     })),
               },
             ]}

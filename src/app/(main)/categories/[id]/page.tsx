@@ -64,6 +64,11 @@ export default function CategoryDetailPage() {
   const supabase = createClient();
 
   useEffect(() => {
+    if (!categoryId) {
+      toast.error('Invalid category URL');
+      return;
+    }
+
     const fetchCategoryData = async () => {
       try {
         // Fetch category details
@@ -73,7 +78,11 @@ export default function CategoryDetailPage() {
           .eq('path', categoryId)
           .single();
 
-        if (categoryError) throw categoryError;
+        if (categoryError || !categoryData) {
+          toast.error('Category not found');
+          return;
+        }
+
         setCategory(categoryData);
 
         // Fetch templates for this category
