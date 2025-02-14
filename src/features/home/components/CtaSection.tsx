@@ -1,36 +1,49 @@
+'use client';
+
 import { Section } from '@/components/ui/section';
 import { Container } from '@/components/ui/container';
-import Link from 'next/link';
-import { MarqueeBackground } from './MarqueeBackground';
+import { Button } from '@/components/ui/button';
+import Image from 'next/image';
+import { ArrowRight } from 'lucide-react';
 
-export function CtaSection() {
+export default function CtaSection() {
   return (
-    <Section padding='lg' className='relative min-h-[80vh] overflow-hidden'>
-      <MarqueeBackground />
-      <Container size='lg' className='relative z-20'>
-        <div className='flex flex-col items-center justify-center min-h-[70vh] text-center'>
-          <div className='max-w-4xl mx-auto space-y-8'>
-            <h2 className='text-6xl sm:text-7xl font-bold text-white leading-tight'>
-              Find Your Perfect Developer Today
-            </h2>
-            <p className='text-xl text-purple-100 max-w-2xl mx-auto'>
-              Join our directory to connect with top talent.
-            </p>
-            <div className='flex flex-col sm:flex-row gap-6 justify-center pt-8'>
-              <Link
-                href='/talents'
-                className='px-8 py-4 bg-purple-100 hover:bg-white text-purple-900 rounded-lg font-semibold text-lg transition-colors duration-200'
-              >
-                See Our Talents
-              </Link>
-              <Link
-                href='/register'
-                className='group px-8 py-4 border-2 border-purple-100 text-purple-100 hover:bg-purple-100 hover:text-purple-900 rounded-lg font-semibold text-lg transition-colors duration-200 flex items-center gap-2'
-              >
-                Register as an expert
-                <span className='group-hover:translate-x-1 transition-transform'>→</span>
-              </Link>
+    <Section padding='lg' className='bg-gray-50 dark:bg-purple-600 '>
+      <Container size='lg'>
+        <div className='w-full flex flex-col md:flex-row items-center justify-between rounded-2xl p-8 md:p-12 bg-white dark:bg-gray-900 shadow-xl dark:shadow-gray-800/30 border border-gray-100 dark:border-gray-800'>
+          <div className='w-full md:w-1/2 relative order-2 md:order-1'>
+            <div className='relative'>
+              <Image
+                src='/images/cta@2x.webp'
+                alt='Transform Your Digital Experience'
+                width={600}
+                height={600}
+                className='relative rounded-lg'
+                priority
+              />
             </div>
+          </div>
+          
+          <div className='flex flex-col space-y-6 w-full md:w-1/2 md:pl-12 order-1 md:order-2 mb-8 md:mb-0'>
+            <div className='space-y-2'>
+              <h2 className='text-sm font-semibold text-purple-500 dark:text-purple-100 tracking-wide uppercase'>
+                Ready to Get Started?
+              </h2>
+              <h2 className='text-4xl md:text-4xl font-bold  text-purple-500 dark:text-purple-100'>
+                Transform Your Digital Experience Today
+              </h2>
+            </div>
+            <p className='text-lg text-gray-600 dark:text-gray-300'>
+              Join thousands of satisfied users who have already taken their digital presence to the next level. Start your journey with us and see the difference.
+            </p>
+            <div className='flex flex-col sm:flex-row gap-4'>
+              <Button size="lg" variant="default" className='group'>
+                Get Started Now
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+              
+            </div>
+            
           </div>
         </div>
       </Container>

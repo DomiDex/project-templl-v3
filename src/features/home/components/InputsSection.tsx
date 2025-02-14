@@ -30,11 +30,17 @@ export function InputsSection() {
     <Section padding='lg' className='bg-gray-50 dark:bg-gray-800/50'>
       <Container size='lg'>
         <div className='space-y-12'>
-          <div className='text-center space-y-4'>
-            <h2 className='text-4xl font-bold'>
-              Explore the Templl for <br /> Your Project Requirement
-            </h2>
+          <div className='flex justify-between items-center'>
+            <div className='space-y-4'>
+              <h2 className='text-4xl font-bold'>
+                Explore the Templl for Your Project Requirement
+              </h2>
+              <p className='text-gray-600 dark:text-gray-400 max-w-2xl'>
+                Find the perfect solution for your development needs
+              </p>
+            </div>
           </div>
+
           <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
             {inputs.map((input) => (
               <InputCard key={input.title} {...input} />
