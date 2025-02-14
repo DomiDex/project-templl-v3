@@ -1,27 +1,27 @@
 import Link from 'next/link';
-import { cn } from '@/utils/cn';
-import { AnimatedArrow } from './animated-arrow';
+import { cn } from '@/lib/utils';
+import AnimatedArrow from './AnimatedArrow';
 
 interface ArrowLinkProps {
   href: string;
   children: React.ReactNode;
   className?: string;
 }
+
 export default function ArrowLink({
   href,
   children,
   className,
 }: ArrowLinkProps) {
   return (
-    <Link
-      href={href}
+    <span
       className={cn(
-        'inline-flex items-center gap-2 text-purple-600 hover:text-purple-700 dark:text-purple-100 dark:hover:text-purple-100 transition-colors',
+        'inline-flex items-center gap-2 text-purple-600 hover:text-purple-700 dark:text-purple-100 dark:hover:text-purple-100 transition-colors cursor-pointer',
         className
       )}
     >
       {children}
       <AnimatedArrow />
-    </Link>
+    </span>
   );
 }

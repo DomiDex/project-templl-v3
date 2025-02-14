@@ -8,7 +8,7 @@ export default function HeroImageAnimation(): JSX.Element {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  const springConfig = { damping: 25, stiffness: 100 };
+  const springConfig = { damping: 30, stiffness: 150 };
   const springX = useSpring(mouseX, springConfig);
   const springY = useSpring(mouseY, springConfig);
 
@@ -16,8 +16,8 @@ export default function HeroImageAnimation(): JSX.Element {
     const handleMouseMove = (e: MouseEvent) => {
       const { clientX, clientY } = e;
       const { innerWidth, innerHeight } = window;
-      const x = clientX - innerWidth / 2;
-      const y = clientY - innerHeight / 2;
+      const x = (clientX - innerWidth / 2) * 0.5;
+      const y = (clientY - innerHeight / 2) * 0.5;
       mouseX.set(x);
       mouseY.set(y);
     };
@@ -30,10 +30,10 @@ export default function HeroImageAnimation(): JSX.Element {
     <div className='relative w-full h-full'>
       <motion.div
         style={{
-          rotateX: useTransform(springY, [-300, 300], [5, -5]),
-          rotateY: useTransform(springX, [-300, 300], [-5, 5]),
+          rotateX: useTransform(springY, [-300, 300], [2, -2]),
+          rotateY: useTransform(springX, [-300, 300], [-2, 2]),
           transformStyle: 'preserve-3d',
-          perspective: 1000,
+          perspective: 1200,
         }}
         className='relative w-full h-full'
       >
@@ -43,14 +43,15 @@ export default function HeroImageAnimation(): JSX.Element {
           width={500}
           height={500}
           className='w-full h-full object-cover rounded-lg'
+          priority
         />
       </motion.div>
 
       <motion.div
-        className='absolute top-[-15%] left-[45%] z-10'
+        className='absolute top-[-8%] left-[50%] transform -translate-x-1/2 z-10'
         style={{
-          x: useTransform(springX, [-300, 300], [-30, 30]),
-          y: useTransform(springY, [-300, 300], [-15, 15]),
+          x: useTransform(springX, [-300, 300], [-20, 20]),
+          y: useTransform(springY, [-300, 300], [-10, 10]),
         }}
         animate={{
           rotate: [0, 360],
@@ -64,17 +65,17 @@ export default function HeroImageAnimation(): JSX.Element {
         <Image
           src='/images/webflow.svg'
           alt='Webflow'
-          width={55}
-          height={55}
+          width={65}
+          height={65}
           className='drop-shadow-xl'
         />
       </motion.div>
 
       <motion.div
-        className='absolute top-[10%] left-[-10%] z-10'
+        className='absolute top-[20%] left-[-15%] z-10'
         style={{
-          x: useTransform(springX, [-300, 300], [-10, 40]),
-          y: useTransform(springY, [-300, 300], [-25, 25]),
+          x: useTransform(springX, [-300, 300], [-15, 25]),
+          y: useTransform(springY, [-300, 300], [-15, 15]),
         }}
         animate={{
           rotate: [0, 360],
@@ -83,23 +84,22 @@ export default function HeroImageAnimation(): JSX.Element {
         transition={{
           rotate: { duration: 35, repeat: Infinity, ease: 'linear' },
           scale: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
-          delay: 1,
         }}
       >
         <Image
           src='/images/react.svg'
           alt='React'
-          width={60}
-          height={60}
+          width={70}
+          height={70}
           className='drop-shadow-xl'
         />
       </motion.div>
 
       <motion.div
-        className='absolute bottom-[15%] right-[20%] z-10'
+        className='absolute bottom-[10%] right-[-10%] z-10'
         style={{
-          x: useTransform(springX, [-300, 300], [20, -35]),
-          y: useTransform(springY, [-300, 300], [30, -20]),
+          x: useTransform(springX, [-300, 300], [15, -25]),
+          y: useTransform(springY, [-300, 300], [20, -15]),
         }}
         animate={{
           rotate: [360, 0],
@@ -108,23 +108,22 @@ export default function HeroImageAnimation(): JSX.Element {
         transition={{
           rotate: { duration: 45, repeat: Infinity, ease: 'linear' },
           scale: { duration: 7, repeat: Infinity, ease: 'easeInOut' },
-          delay: 2,
         }}
       >
         <Image
           src='/images/Framer.svg'
           alt='Framer'
-          width={50}
-          height={50}
+          width={60}
+          height={60}
           className='drop-shadow-xl'
         />
       </motion.div>
 
       <motion.div
-        className='absolute top-[30%] right-[-5%] z-10'
+        className='absolute top-[25%] right-[-12%] z-10'
         style={{
-          x: useTransform(springX, [-300, 300], [35, -15]),
-          y: useTransform(springY, [-300, 300], [-20, 35]),
+          x: useTransform(springX, [-300, 300], [25, -20]),
+          y: useTransform(springY, [-300, 300], [-15, 25]),
         }}
         animate={{
           rotate: [0, -360],
@@ -133,14 +132,13 @@ export default function HeroImageAnimation(): JSX.Element {
         transition={{
           rotate: { duration: 50, repeat: Infinity, ease: 'linear' },
           scale: { duration: 9, repeat: Infinity, ease: 'easeInOut' },
-          delay: 1.5,
         }}
       >
         <Image
           src='/images/next.svg'
           alt='Next.js'
-          width={45}
-          height={45}
+          width={55}
+          height={55}
           className='drop-shadow-xl'
         />
       </motion.div>
