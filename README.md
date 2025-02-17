@@ -1,18 +1,73 @@
-## To Do List
+# Templl.dev - Developer Portfolio & Service Platform
 
-- [*] Add a new project form
-- [*] Add a new service form
-- [*] Add a new template form
-- [*] Add a new profile form
-- [ ] display new project, service, template in the account page
-- [ ] edit project, service, template in the account page
-- [ ] delete project, service, template in the account page
-- [ ] create all the main pages
+## Overview
 
-## Database Types
+A modern web platform for developers to showcase their work, share templates, and offer services. Built with Next.js 15, TypeScript, and Supabase.
+
+## Features
+
+### For Developers
+
+- Create and manage project portfolios
+- Offer professional services
+- Share development templates
+- Customizable profile pages
+- Pro plan with unlimited projects/services
+
+### For Clients
+
+- Browse developer portfolios
+- Access high-quality templates
+- Find specialized services
+- Advanced search capabilities
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: Tailwind CSS, Framer Motion
+- **Backend**: Supabase
+- **State Management**: Zustand
+- **UI Components**: Radix UI
+- **Form Handling**: Zod
+- **Markdown**: React Markdown with GFM
+
+## Project Structure
+
+```
+src/
+├── app/             # Next.js app router
+├── components/      # Shared UI components
+├── features/        # Feature-based modules
+├── lib/            # Utility functions
+├── types/          # TypeScript definitions
+└── utils/          # Helper functions
+```
+
+## Development Progress
+
+### Completed ✅
+
+- [x] Add a new project form
+- [x] Add a new service form
+- [x] Add a new template form
+- [x] Add a new profile form
+- [x] User authentication
+- [x] Pro user features
+- [x] Image upload system
+
+### In Progress 🚧
+
+- [ ] Display new project, service, template in the account page
+- [ ] Edit project, service, template in the account page
+- [ ] Delete project, service, template in the account page
+- [ ] Create all the main pages
+
+## Database Schema
+
+### Profile
 
 ```typescript
-export type Profile = {
+type Profile = {
   id: string;
   username: string | null;
   path: string | null;
@@ -27,81 +82,46 @@ export type Profile = {
   updated_at: string;
   created_at: string;
 };
-
-export type Tables = {
-  profiles: {
-    Row: Profile;
-    Insert: Omit<Profile, 'created_at' | 'updated_at'>;
-    Update: Partial<Omit<Profile, 'id'>>;
-  };
-};
-
-export type DbResult<T> = T extends PromiseLike<infer U> ? U : never;
-export type DbResultOk<T> = T extends PromiseLike<{ data: infer U }>
-  ? Exclude<U, null>
-  : never;
-
-export type Schema = {
-  public: {
-    Tables: Tables;
-  };
-};
-
-export type SupabaseDatabase = SupabaseClient<Schema>;
-
-// Helper type for form inputs
-export type ProfileFormData = Omit<Profile, 'id' | 'created_at' | 'updated_at'>;
 ```
 
-when using the service count, make sure to check if the user is pro or not.
-if the user is pro, then the service count should be unlimited.
-if the user is not pro, then the service count should be limited to the service limit.
-set the service count to the service limit if the user is not pro.
-change the text to the following:
-You can publish 2 more projects
+## Service Limits
 
-1/3 projects
+- Free Plan: Maximum 3 projects/services
+- Pro Plan: Unlimited projects/services
 
-<Role>As a senior developer specializing in debugging, your role is to meticulously analyze the codebase, pinpoint the root cause of the issue, and implement an effective solution."
+## Getting Started
 
-Here's how I improved it:
+1. Install dependencies:
 
-Stronger verbs: "Analyze" is fine, but "meticulously analyze" emphasizes thoroughness. "Pinpoint" is more precise than "identify." "Implement" is more active than "fix."
-Clarity: I rephrased slightly to improve the flow and clarity.
-Conciseness: I removed the unnecessary "it."
-Professional tone: The overall language is more polished and professional.<Role>
+```bash:README.md
+npm install
+```
 
-<Bug>
+2. Run development server:
 
-Error: supabase.from is not a function
-at Module.generateMetadata (rsc://React/Server/C:%5CUsers%5Cdomi%5CDesktop%5Cnext-playground%5Cproject-templl-v3%5C.next%5Cserver%5Cchunks%5Cssr%5C%5Broot%20of%20the%20server%5D**7d1e82._.js?2:94:55)
-at resolveErrorDev (http://localhost:3000/\_next/static/chunks/node_modules_next_dist_compiled_107ce8._.js:3662:65)
-at getOutlinedModel (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_107ce8._.js:3367:28)
-at parseModelString (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_107ce8._.js:3446:52)
-at Array.<anonymous> (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_107ce8._.js:3864:51)
-at JSON.parse (<anonymous>)
-at resolveConsoleEntry (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_107ce8._.js:3745:32)
-at processFullStringRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_107ce8._.js:3841:17)
-at processFullBinaryRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_107ce8._.js:3812:9)
-at progress (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_107ce8._.js:3932:102)
-Error: supabase.from is not a function
-at generateJsonLd (rsc://React/Server/C:%5CUsers%5Cdomi%5CDesktop%5Cnext-playground%5Cproject-templl-v3%5C.next%5Cserver%5Cchunks%5Cssr%5C%5Broot%20of%20the%20server%5D**7d1e82._.js?0:162:44)
-at StackLayout (rsc://React/Server/C:%5CUsers%5Cdomi%5CDesktop%5Cnext-playground%5Cproject-templl-v3%5C.next%5Cserver%5Cchunks%5Cssr%5C%5Broot%20of%20the%20server%5D\_\_7d1e82._.js?1:210:26)
-at resolveErrorDev (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_107ce8._.js:3662:65)
-at processFullStringRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_107ce8._.js:3824:23)
-at processFullBinaryRow (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_107ce8._.js:3812:9)
-at progress (http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_107ce8._.js:3932:102)
-</Bug>
+```bash
+npm run dev
+```
 
-<Analysis>
-</Analysis>
+3. Build for production:
 
-<Fix>
-Write Clean Code
+```bash
+npm run build
+```
 
-Follow coding conventions: Adhere to the existing coding style and conventions of the project. This ensures consistency and readability.
-Use meaningful names: Choose descriptive names for variables, functions, and classes that clearly convey their purpose.
-Write clear and concise code: Avoid unnecessary comments or overly complex logic. Strive for code that is self-explanatory.
-Break down large functions: If a function is too long or complex, break it down into smaller, more manageable functions.
-Avoid code duplication: If you find yourself repeating code, extract it into a reusable function or component.
-</Fix>
+## Contributing
+
+1. Follow the existing coding style and conventions
+2. Use meaningful variable and function names
+3. Write clear and concise code
+4. Break down complex functions
+5. Avoid code duplication
+
+## Environment Variables
+
+Create a `.env.local` file with:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```

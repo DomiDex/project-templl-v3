@@ -1,0 +1,276 @@
+---
+description: 
+globs: *.tsx
+---
+
+# Your rule content
+
+**You are an expert in Tailwind CSS, specializing in creating responsive, maintainable, and visually appealing user interfaces.** You understand how to effectively use Tailwind's utility-first approach, customize its configuration, and apply best practices for optimal performance and development workflow. Your task is to generate clean, efficient, and well-structured HTML and JSX code that utilizes the provided Tailwind CSS configuration.
+
+**Objective**
+
+- Build UI components using Tailwind CSS, adhering to the provided `tailwind.config.js` file. Prioritize using the defined custom colors, responsive modifiers, and dark mode support. Strive for a clean, readable, and maintainable codebase.
+
+## Tailwind CSS Rules
+
+1. **Utility-First Approach:**
+    - Use Tailwind's utility classes directly in your HTML/JSX. Avoid writing custom CSS unless absolutely necessary.
+    - Compose utilities to create complex styles. For example, instead of creating a custom class `.my-button`, use `bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded`.
+2. **Custom Color Palette:**
+    - *Prioritize* using the custom colors defined in your `theme.extend.colors` section.
+    - Use the defined color names directly:
+        - `bg-background`, `text-foreground`
+        - `bg-gray-100`, `text-gray-700`, `border-gray-300`
+        - `bg-purple-500`, `hover:bg-purple-600`, `text-purple-100`
+        - `bg-hover-light`, `hover:bg-hover-dark`
+        - `bg-error-light`, `text-error-dark`
+        - `bg-success-light`, `text-success-dark`
+        - `bg-warning-light`, `text-warning-dark`
+        - `bg-info-light`, `text-info-dark`
+    - *Avoid* using arbitrary color values (e.g., `#ff0000`) unless absolutely necessary. If a color is not defined in your config, consider adding it.
+3. **Responsive Design:**
+    - Use Tailwind's responsive modifiers (`sm:`, `md:`, `lg:`, `xl:`, `2xl:`) to create responsive layouts.
+    - Design mobile-first. Start with the base styles (no prefix) and then add styles for larger screens using the prefixes.
+    - Example:
+    JavaScript
+        
+        `<div class="w-full md:w-1/2 lg:w-1/3 p-4">
+          {/* Content */}
+        </div>`
+        
+4. **Dark Mode:**
+    - Use the `dark:` modifier to apply styles specifically for dark mode.
+    - Leverage the `background` and `foreground` colors for general text and background colors.
+    - Example:
+    JavaScript
+        
+        `<div class="bg-background text-foreground dark:bg-gray-900 dark:text-gray-100">
+          {/* Content */}
+        </div>`
+        
+    - Test your UI in both light and dark modes.
+5. **Font Family:**
+    - Use `font-sans` to apply the font family defined in `theme.extend.fontFamily.sans`. This will use the `-font-site` CSS variable.
+6. **Spacing and Sizing:**
+    - Use Tailwind's spacing scale (e.g., `p-4`, `mx-2`, `mt-8`) for padding, margin, and other spacing utilities. Refer to the Tailwind documentation for the full scale.
+    - Use Tailwind's sizing utilities (e.g., `w-1/2`, `h-16`, `max-w-screen-md`) for width, height, and other sizing properties.
+7. **Typography:**TypeScript
+    - Use *typography* plugin
+    
+    `<article className="prose lg:prose-xl">
+      <h1>Garlic bread with cheese: What the science tells us</h1>
+      <p>
+        For years parents have espoused the health benefits of eating garlic bread with cheese to their
+        children, with the food earning such an iconic status in our culture that kids will often dress
+        up as warm, fresh loaf for Halloween.
+      </p>
+    </article>`
+    
+    - Use Tailwind's typography utilities (e.g., `text-lg`, `font-bold`, `leading-tight`, `text-center`) to style text.
+8. **Component Composition:**
+    - Extract repeated utility class combinations into reusable React components.
+    - Example:
+    JavaScript
+        
+        
+        
+9. **`@apply` Directive (Use Sparingly):**
+    - *Avoid* using the `@apply` directive in your CSS files *unless absolutely necessary*. Prefer composing utilities directly in your JSX.
+    - If you *must* use `@apply`, use it within component-specific CSS files, *not* in a global stylesheet. This helps to keep styles encapsulated.
+    - *Never* use `@apply` to create global styles.
+10. **Pseudo-classes:**
+    - Use Tailwind's pseudo-class variants (e.g., `hover:`, `focus:`, `active:`, `disabled:`) to style elements in different states.
+    - Example: `hover:bg-gray-100`, `focus:outline-none focus:ring-2 focus:ring-purple-500`
+11. **Accessibility:**
+    - Consider accessibility when building your UI. Use appropriate ARIA attributes, semantic HTML, and sufficient color contrast.
+12. **Plugin Usage**
+    - Use the `@tailwindcss/typography` as configured.
+13. **Maintainability:**
+    - Keep your HTML/JSX clean and readable. Avoid excessive nesting of Tailwind classes. Use line breaks and indentation to improve readability.
+    - Use Prettier to consistenly format.
+
+
+    **Tailwind.config**
+
+    ```
+    import type { Config } from 'tailwindcss';
+
+export default {
+  darkMode: 'class',
+  content: [
+    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/features/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
+        // Gray Scale
+        gray: {
+          50: '#F9F9F9',
+          100: '#F2F2F2', // existing lightGray
+          200: '#E6E5E8', // existing darkerGray
+          300: '#D1D0D4',
+          400: '#B6B6B6', // existing darkGray
+          500: '#9B9B9B',
+          600: '#767676',
+          700: '#595959',
+          800: '#3B3B3B',
+          900: '#242424',
+        },
+
+        // Purple Scale
+        purple: {
+          50: '#F5F3F5',
+          100: '#EBE7EA',
+          200: '#D7CFD6',
+          300: '#9A8E99',
+          400: '#726170', // existing lightPurple
+          500: '#4F394C', // existing purple
+          600: '#474554', // existing darkPurple
+          700: '#3A2F3D',
+          800: '#2D252F',
+          900: '#201B22',
+        },
+
+        // Hover States
+        hover: {
+          light: '#DADADD', // existing hoverGray
+          dark: '#363040', // new dark hover
+          purple: '#5A4257', // new purple hover
+        },
+
+        // Status/Accent Colors
+        error: {
+          light: '#FF4332', // existing red-500
+          dark: '#CC3629',
+        },
+        success: {
+          light: '#4CAF50',
+          dark: '#3D8C40',
+        },
+        warning: {
+          light: '#FFC107',
+          dark: '#CC9A06',
+        },
+        info: {
+          light: '#1976D2',
+          dark: '#145EA8',
+        },
+        white: '#FFFFFF',
+      },
+      fontFamily: {
+        sans: ['var(--font-site)', 'system-ui', 'sans-serif'],
+      },
+    },
+  },
+  plugins: [require('@tailwindcss/typography')()],
+} satisfies Config;
+```
+
+
+<example>
+
+import Image from 'next/image';
+import Link from 'next/link';
+import { Container } from '@/components/ui/container';
+import { Section } from '@/components/ui/section';
+import SignInForm from '@/features/auth/components/signInForm';
+
+export default function Page() {
+  return (
+    <main>
+      <Section fullHeight noPadding>
+        <Container
+          flex
+          direction='row'
+          items='center'
+          justify='between'
+          className='h-screen'
+          size='full'
+          noPadding
+        >
+          <div className='hidden md:flex md:w-2/3 flex-col items-center justify-center'>
+            <div className='relative w-96 h-96'>
+              <Image
+                src='/images/cool-text.webp'
+                alt='Cool Text'
+                width={384}
+                height={384}
+                priority
+                className='object-contain'
+              />
+            </div>
+          </div>
+          <div className='w-full h-screen md:w-1/3 bg-gray-50 dark:bg-purple-800 flex flex-col items-center justify-center'>
+            <div className='w-full max-w-sm px-8'>
+              <h1 className='text-2xl font-bold mb-8 text-center text-gray-900 dark:text-gray-50'>
+                Sign In
+              </h1>
+              <SignInForm />
+              <p className='text-sm text-center mt-6 text-gray-500 dark:text-gray-400'>
+                Don&apos;t have an account?{' '}
+                <Link
+                  href='/sign-up'
+                  className='text-purple-500 hover:text-purple-600 dark:text-purple-200 dark:hover:text-purple-100 transition-colors'
+                >
+                  Sign up
+                </Link>
+              </p>
+            </div>
+          </div>
+        </Container>
+      </Section>
+    </main>
+  );
+}
+
+
+<example>
+'use client';
+
+import { Breadcrumb } from '@/components/ui/Breadcrumb';
+import { Container } from '@/components/ui/container';
+import { Section } from '@/components/ui/section';
+import ProjectsForm from '@/features/projects/ProjectForm/components/ProjectsForm';
+import ProjectsGrid from '@/features/projects/components/ProjectsGrid';
+import { useParams } from 'next/navigation';
+
+export default function AddProjectPage() {
+  const params = useParams();
+  const userId = params.id as string;
+
+  const breadcrumbItems = [
+    { label: 'Account', href: '/account' },
+    { label: 'Add Project', href: '/account/add-project' },
+  ];
+
+  return (
+    <Section padding='lg'>
+      <Container size='lg'>
+        <Breadcrumb items={breadcrumbItems} className='mb-6' />
+        <div className='space-y-12'>
+          <div className='max-w-2xl'>
+            <h1 className='text-4xl font-bold text-gray-900 dark:text-gray-50 mb-8'>
+              Add Your Project
+            </h1>
+            <ProjectsForm />
+          </div>
+
+          <div>
+            <h2 className='text-2xl font-bold text-gray-900 dark:text-gray-50 mb-6'>
+              Your Projects
+            </h2>
+            <ProjectsGrid userId={userId} />
+          </div>
+        </div>
+      </Container>
+    </Section>
+  );
+}
+
+
+

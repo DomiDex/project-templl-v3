@@ -1,0 +1,156 @@
+---
+description: 
+globs: *.tsx,*.ts
+---
+
+# Your rule content
+
+
+# **Site Structure Analysis**
+
+## **1. Authentication Routes (/app/(auth)/)**
+
+- /sign-in - User login page
+- /sign-up - New user registration page
+- Features:
+- Split screen layout
+- Left side: Decorative image (hidden on mobile)
+- Right side: Authentication forms
+- Responsive design
+- Dark mode support
+
+## **2. Main Routes (/app/(main)/)**
+
+### **Home Page (/)**
+
+- Hero Section
+- Headline: "Discover Top Developers in One Easy Place"
+- CTA buttons: "Explore Templates" and "Register as a Talent"
+- Animated hero image
+- Features Section
+- Benefits for developers and clients
+- Illustration
+- CTA buttons
+- Template Section
+- Grid display of recent templates
+- Loading skeleton states
+- Pagination (8 items per page)
+
+### **Static Pages**
+
+- /about - Company information and mission
+- /privacy - Privacy policy
+- /terms - Terms of service
+
+## **3. Feature Routes**
+
+### **Projects**
+
+- Project listing
+- Project creation form
+- Project editing modal
+- Features:
+- Pro/Free user limits (3 projects for free users)
+- Progress indicator
+- Image upload
+- Markdown editor for descriptions
+- SEO metadata fields
+
+### **Services**
+
+- Service listing
+- Service creation form
+- Similar structure to projects
+- Features:
+- Pro/Free user limits
+- Service categories
+- Pricing information
+- Description editor
+
+### **Templates**
+
+- Template marketplace
+- Template creation
+- Features:
+- Stack filtering
+- Preview images
+- Pricing options
+- Download/Purchase flow
+
+## **4. User Dashboard**
+
+- Profile management
+- Project management
+- Service management
+- Template management
+- Analytics (planned)
+
+## **5. Shared Components**
+
+### **UI Components**
+
+- Button
+- Variants: default, outline, ghost
+- Sizes: sm, md, lg
+- Full width option
+- Dark mode support
+- Section
+- Configurable padding
+- Background color options
+- Full height option
+- Container
+- Size variants
+- Flex options
+- Padding control
+- Form Elements
+- Input
+- TextArea
+- Select
+- ImageUpload
+- MarkdownEditor
+
+### **Layout Components**
+
+- Navigation
+- Footer
+- Breadcrumbs
+- Toast notifications
+- Modal/Dialog system
+
+## **6. Theme System**
+
+- Light/Dark mode support
+- Color palette:
+- Gray scale
+- Purple scale
+- Status colors (error, success, warning, info)
+- CSS Variables for dynamic theming
+- Tailwind configuration
+
+## **7. Features Organizationsrc/features/├── auth/ # Authentication related features├── home/ # Homepage components├── projects/ # Project management├── services/ # Service management├── templates/ # Template marketplace├── theme/ # Theme management└── profile/ # User profile management**
+
+## **8. State Management**
+
+- Zustand stores for:
+- Authentication state
+- Theme preferences
+- Form states
+- Modal states
+
+## **9. API Integration**
+
+- Supabase client setup
+- Data fetching patterns
+- Real-time subscriptions (planned)
+- Image upload handling
+
+## **10. Responsive Design**
+
+- Mobile-first approach
+- Breakpoints:
+- md: tablet and up
+- lg: desktop
+- Flexible layouts
+- Conditional rendering for mobile/desktop
+
+This structure shows a well-organized, feature-rich application with clear separation of concerns and modern web development practices. The architecture supports scalability and maintainability while providing a solid foundation for future features.
