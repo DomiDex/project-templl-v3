@@ -23,11 +23,11 @@ interface TemplateDetail {
   user_id: string;
   stacks: {
     stack_name: string;
-  } | null;
+  };
   profiles: {
     username: string;
     id: string;
-  } | null;
+  };
 }
 
 export default function TemplateDetailPage() {
@@ -38,46 +38,60 @@ export default function TemplateDetailPage() {
 
   useEffect(() => {
     const fetchTemplate = async () => {
-      const { data: rawData, error } = await supabase
-        .from('templates')
-        .select(
-          `
-          id,
-          template_name,
-          og_image_url,
-          thumbnail_image_url,
-          price,
-          template_link,
-          long_description,
-          meta_description,
-          user_id,
-          stacks (
-            stack_name
-          ),
-          profiles!templates_user_id_fkey (
+      try {
+        const { data: rawData, error } = await supabase
+          .from('templates')
+          .select(
+            `
             id,
-            username
+            template_name,
+            og_image_url,
+            thumbnail_image_url,
+            price,
+            template_link,
+            long_description,
+            meta_description,
+            user_id,
+            stacks!inner (
+              stack_name
+            ),
+            profiles!inner (
+              id,
+              username
+            )
+          `
           )
-        `
-        )
-        .eq('path', params.id)
-        .single();
+          .eq('path', params.id)
+          .single();
 
-      if (error) {
-        console.error('Error fetching template:', error);
-        toast.error('Failed to load template details');
-        return;
+        if (error) {
+          console.error('Error fetching template:', error);
+          toast.error('Failed to load template details');
+          setTemplate(null);
+        } else if (!rawData.stacks || !rawData.profiles) {
+          console.error('Template data is missing required relations');
+          toast.error('Template data is incomplete');
+          setTemplate(null);
+        } else {
+          // Transform the data to match the TemplateDetail interface
+          const data: TemplateDetail = {
+            ...rawData,
+            stacks: Array.isArray(rawData.stacks)
+              ? rawData.stacks[0]
+              : rawData.stacks,
+            profiles: Array.isArray(rawData.profiles)
+              ? rawData.profiles[0]
+              : rawData.profiles,
+          };
+          setTemplate(data);
+        }
+      } catch (error) {
+        console.error('Unexpected error:', error);
+        toast.error('An unexpected error occurred');
+        setTemplate(null);
+      } finally {
+        setLoading(false);
       }
-
-      // Transform the data to match the TemplateDetail interface
-      const data: TemplateDetail = {
-        ...rawData,
-        stacks: rawData.stacks?.[0] || null,
-        profiles: rawData.profiles?.[0] || null,
-      };
-
-      setTemplate(data);
-      setLoading(false);
     };
 
     fetchTemplate();
@@ -139,11 +153,11 @@ export default function TemplateDetailPage() {
 
             <div className='flex items-center gap-4'>
               <p className='text-gray-600 dark:text-gray-400'>
-                by {template.profiles?.username}
+                by {template.profiles.username}
               </p>
               <span className='text-gray-400'>|</span>
               <p className='text-gray-500 dark:text-gray-500'>
-                {template.stacks?.stack_name}
+                {template.stacks.stack_name}
               </p>
             </div>
 
