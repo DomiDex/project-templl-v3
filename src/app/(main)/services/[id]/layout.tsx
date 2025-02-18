@@ -9,7 +9,7 @@ interface ServiceLayoutProps {
 export async function generateMetadata({
   params,
 }: ServiceLayoutProps): Promise<Metadata> {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   try {
     const { data: service, error } = await supabase
@@ -41,7 +41,7 @@ export async function generateMetadata({
     const title = `${service.service_name} - Templl.dev`;
     const description =
       service.meta_description ||
-      `${service.service_name} by ${service.profiles?.username}. Built with ${service.stacks?.stack_name}. Available on Templl.dev`;
+      `${service.service_name} by ${service.profiles[0]?.username}. Built with ${service.stacks[0]?.stack_name}. Available on Templl.dev`;
 
     return {
       title,
@@ -97,7 +97,7 @@ export async function generateMetadata({
 
 // JSON-LD Schema for better SEO
 const generateJsonLd = async (params: { id: string }) => {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: service } = await supabase
     .from('services')
     .select(
@@ -122,7 +122,7 @@ const generateJsonLd = async (params: { id: string }) => {
     description: service.meta_description,
     provider: {
       '@type': 'Person',
-      name: service.profiles?.username,
+      name: service.profiles[0]?.username,
     },
     offers: {
       '@type': 'Offer',
@@ -131,7 +131,7 @@ const generateJsonLd = async (params: { id: string }) => {
     },
     image: service.og_image_url || '/home-og-image@2x.webp',
     url: `https://templl.dev/services/${params.id}`,
-    category: service.stacks?.stack_name,
+    category: service.stacks[0]?.stack_name,
     breadcrumb: {
       '@type': 'BreadcrumbList',
       itemListElement: [
