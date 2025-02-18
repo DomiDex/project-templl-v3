@@ -2,22 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
-import TemplateAccountCard from './TemplateAccountCard';
+import TemplateCard from './TemplateCard';
 import { toast } from 'sonner';
-import Link from 'next/link';
-import EditTemplateModal from './EditTemplateModal';
 
 interface Template {
   id: string;
   template_name: string;
   stack_name: string;
   user_username: string;
-  thumbnail_url: string;
+  thumbnail_image_url: string;
   price: number;
-}
-
-interface TemplatesGridProps {
-  userId: string;
+  path: string;
 }
 
 interface TemplateResponse {
@@ -25,13 +20,8 @@ interface TemplateResponse {
   template_name: string;
   thumbnail_image_url: string | null;
   price: number;
+  path: string;
   stack_id: string;
-  category_id: string;
-  template_link: string | null;
-  meta_title: string | null;
-  meta_description: string | null;
-  long_description: string | null;
-  og_image_url: string | null;
   stacks: {
     stack_name: string;
   } | null;
@@ -40,12 +30,14 @@ interface TemplateResponse {
   } | null;
 }
 
+interface TemplatesGridProps {
+  userId: string;
+}
+
 export default function TemplatesGrid({ userId }: TemplatesGridProps) {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
 
   useEffect(() => {
     const fetchTemplates = async () => {
@@ -57,6 +49,7 @@ export default function TemplatesGrid({ userId }: TemplatesGridProps) {
           template_name,
           thumbnail_image_url,
           price,
+          path,
           stack_id,
           stacks (
             stack_name
@@ -74,17 +67,16 @@ export default function TemplatesGrid({ userId }: TemplatesGridProps) {
         return;
       }
 
-      console.log('Templates data:', data);
-
       const formattedTemplates = (data as unknown as TemplateResponse[]).map(
         (template) => ({
           id: template.id,
           template_name: template.template_name,
           stack_name: template.stacks?.stack_name || '',
           user_username: template.profiles?.username || '',
-          thumbnail_url:
+          thumbnail_image_url:
             template.thumbnail_image_url || '/placeholder-template.jpg',
           price: template.price || 0,
+          path: template.path,
         })
       );
 
@@ -95,52 +87,12 @@ export default function TemplatesGrid({ userId }: TemplatesGridProps) {
     fetchTemplates();
   }, [userId, supabase]);
 
-  const handleEdit = async (template: Template) => {
-    try {
-      const { data, error } = await supabase
-        .from('templates')
-        .select('*')
-        .eq('id', template.id)
-        .single();
-
-      if (error) throw error;
-
-      setSelectedTemplate(data);
-      setIsEditModalOpen(true);
-    } catch (error) {
-      console.error('Error fetching template details:', error);
-      toast.error('Failed to load template details');
-    }
-  };
-
-  const handleCloseModal = () => {
-    setIsEditModalOpen(false);
-    setSelectedTemplate(null);
-  };
-
-  const handleDelete = async (templateId: string) => {
-    try {
-      const { error } = await supabase
-        .from('templates')
-        .delete()
-        .eq('id', templateId);
-
-      if (error) throw error;
-
-      setTemplates(templates.filter((t) => t.id !== templateId));
-      toast.success('Template deleted successfully');
-    } catch (error) {
-      console.error('Error deleting template:', error);
-      toast.error('Failed to delete template');
-    }
-  };
-
   if (loading) {
     return (
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-        {[...Array(3)].map((_, i) => (
+        {[...Array(6)].map((_, i) => (
           <div key={i} className='animate-pulse'>
-            <div className='bg-gray-200 dark:bg-gray-700 h-48 rounded-md mb-4' />
+            <div className='bg-gray-200 dark:bg-gray-700 aspect-[16/9] rounded-md mb-4' />
             <div className='h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2' />
             <div className='h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2' />
           </div>
@@ -151,58 +103,22 @@ export default function TemplatesGrid({ userId }: TemplatesGridProps) {
 
   if (templates.length === 0) {
     return (
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-        <Link
-          href={`/account/${userId}/add-templates`}
-          className='group relative overflow-hidden bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 rounded-lg p-6 h-48 border border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center gap-4'
-        >
-          <div className='h-12 w-12 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-200'>
-            <svg
-              className='w-6 h-6 text-purple-600 dark:text-purple-400'
-              fill='none'
-              stroke='currentColor'
-              viewBox='0 0 24 24'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                d='M12 4v16m8-8H4'
-              />
-            </svg>
-          </div>
-          <div className='text-center'>
-            <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
-              Add Your First Template
-            </h3>
-            <p className='text-sm text-gray-600 dark:text-gray-400 mt-1'>
-              Click here to share your templates
-            </p>
-          </div>
-        </Link>
+      <div className='text-center py-12'>
+        <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
+          No templates available
+        </h3>
+        <p className='text-sm text-gray-600 dark:text-gray-400 mt-1'>
+          Check back later for new templates
+        </p>
       </div>
     );
   }
 
   return (
-    <>
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
-        {templates.map((template) => (
-          <TemplateAccountCard
-            key={template.id}
-            template={template}
-            onEdit={() => handleEdit(template)}
-            onDelete={() => handleDelete(template.id)}
-          />
-        ))}
-      </div>
-      {selectedTemplate && (
-        <EditTemplateModal
-          isOpen={isEditModalOpen}
-          onClose={handleCloseModal}
-          template={selectedTemplate}
-        />
-      )}
-    </>
+    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+      {templates.map((template) => (
+        <TemplateCard key={template.id} template={template} />
+      ))}
+    </div>
   );
 }

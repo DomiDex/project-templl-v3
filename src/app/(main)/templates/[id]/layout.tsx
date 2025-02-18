@@ -9,7 +9,7 @@ interface TemplateLayoutProps {
 export async function generateMetadata({
   params,
 }: TemplateLayoutProps): Promise<Metadata> {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   try {
     const { data: template, error } = await supabase
@@ -41,13 +41,13 @@ export async function generateMetadata({
     const title = `${template.template_name} - Templl.dev`;
     const description =
       template.meta_description ||
-      `${template.template_name} by ${template.profiles?.username}. Built with ${template.stacks?.stack_name}. Available on Templl.dev`;
+      `${template.template_name} by ${template.profiles?.[0]?.username}. Built with ${template.stacks?.[0]?.stack_name}. Available on Templl.dev`;
 
     return {
       title,
       description,
       openGraph: {
-        type: 'product',
+        type: 'website',
         locale: 'en_US',
         url: `https://templl.dev/templates/${params.id}`,
         siteName: 'Templl.dev',
@@ -95,7 +95,7 @@ export async function generateMetadata({
 }
 
 const generateJsonLd = async (params: { id: string }) => {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: template } = await supabase
     .from('templates')
     .select(
@@ -126,7 +126,7 @@ const generateJsonLd = async (params: { id: string }) => {
     },
     author: {
       '@type': 'Person',
-      name: template.profiles?.username,
+      name: template.profiles?.[0]?.username,
     },
     offers: {
       '@type': 'Offer',
@@ -134,7 +134,7 @@ const generateJsonLd = async (params: { id: string }) => {
       priceCurrency: 'USD',
       availability: 'https://schema.org/InStock',
     },
-    category: template.stacks?.stack_name,
+    category: template.stacks?.[0]?.stack_name,
     breadcrumb: {
       '@type': 'BreadcrumbList',
       itemListElement: [
