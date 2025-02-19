@@ -15,6 +15,15 @@ interface ServiceWithRelations extends Service {
   user_username?: string;
 }
 
+interface RawServiceData extends Service {
+  stacks: {
+    stack_name: string;
+  } | null;
+  profiles: {
+    username: string;
+  } | null;
+}
+
 export function ServiceSection() {
   const [services, setServices] = useState<ServiceWithRelations[]>([]);
   const [loading, setLoading] = useState(true);
@@ -44,7 +53,7 @@ export function ServiceSection() {
         return;
       }
 
-      const formattedServices = rawData.map((service: any) => ({
+      const formattedServices = rawData.map((service: RawServiceData) => ({
         ...service,
         stack_name: service.stacks?.stack_name || '',
         user_username: service.profiles?.username || '',
@@ -98,7 +107,7 @@ export function ServiceSection() {
                 href={`/services/${service.path}`}
                 className='block group'
               >
-                <div className='bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 rounded-lg p-2 h-full'>
+                <div className='bg-white dark:bg-purple-900  transition-colors duration-200 rounded-lg p-2 h-full'>
                   <div className='aspect-[16/9] overflow-hidden rounded-md'>
                     <Image
                       className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-200'

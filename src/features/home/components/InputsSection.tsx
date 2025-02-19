@@ -27,13 +27,14 @@ const inputs = [
 
 export function InputsSection() {
   return (
-    <Section padding='lg' className='bg-gray-50 dark:bg-gray-800/50'>
+    <Section padding='lg' className='bg-gray-50 dark:bg-purple-900/50'>
       <Container size='lg'>
         <div className='space-y-12'>
           <div className='flex justify-between items-center'>
             <div className='space-y-4'>
               <h2 className='text-4xl font-bold'>
-                Explore the Templl for Your Project Requirement
+                Explore the Templl for Your <br className='hidden md:block' />{' '}
+                Project Requirement
               </h2>
               <p className='text-gray-600 dark:text-gray-400 max-w-2xl'>
                 Find the perfect solution for your development needs

@@ -19,6 +19,16 @@ interface Template {
   stack_name: string;
 }
 
+interface RawTemplateData
+  extends Omit<Template, 'user_username' | 'stack_name'> {
+  stacks: {
+    stack_name: string;
+  } | null;
+  profiles: {
+    username: string;
+  } | null;
+}
+
 export function TemplateSection() {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(true);
@@ -48,7 +58,7 @@ export function TemplateSection() {
         return;
       }
 
-      const formattedTemplates = rawData.map((template: any) => ({
+      const formattedTemplates = rawData.map((template: RawTemplateData) => ({
         ...template,
         stack_name: template.stacks?.stack_name || '',
         user_username: template.profiles?.username || '',
@@ -63,7 +73,7 @@ export function TemplateSection() {
 
   if (loading) {
     return (
-      <Section padding='lg' className='bg-gray-50 dark:bg-gray-800/50'>
+      <Section padding='lg' className='bg-gray-50 dark:bg-purple-900'>
         <Container size='lg'>
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
             {[...Array(8)].map((_, i) => (
@@ -102,7 +112,7 @@ export function TemplateSection() {
                 href={`/templates/${template.path}`}
                 className='block group'
               >
-                <div className='bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 rounded-lg p-2 h-full'>
+                <div className='bg-white dark:bg-purple-900  transition-colors duration-200 rounded-lg p-2 h-full'>
                   <div className='aspect-[16/9] overflow-hidden rounded-md'>
                     <Image
                       className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-200'
