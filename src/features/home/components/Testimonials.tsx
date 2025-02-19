@@ -31,7 +31,7 @@ const testimonials = [
 
 export function Testimonials() {
   return (
-    <Section padding='lg' className='bg-gray-50 dark:bg-gray-800/50'>
+    <Section padding='lg' className='bg-gray-50 dark:bg-purple-900/50'>
       <Container size='lg'>
         <div className='space-y-12'>
           <div className='text-center space-y-4'>
