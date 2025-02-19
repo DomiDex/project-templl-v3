@@ -17,7 +17,7 @@ export function TestimonialCard({
   image,
 }: TestimonialCardProps) {
   return (
-    <div className='bg-white dark:bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-200'>
+    <div className='bg-white dark:bg-purple-900 rounded-xl p-8  transition-all duration-200'>
       <div className='space-y-6'>
         <div className='text-purple-600 dark:text-purple-400'>
           <svg className='h-8 w-8' fill='currentColor' viewBox='0 0 24 24'>

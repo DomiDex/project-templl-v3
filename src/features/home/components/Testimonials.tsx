@@ -8,24 +8,24 @@ const testimonials = [
       'Working with Templl has been transformative for our development process. The quality of developers and the seamless collaboration platform have exceeded our expectations.',
     author: 'Sarah Johnson',
     role: 'Tech Lead',
-    company: 'InnovateTech',
-    image: '/images/testimonials/sarah.webp',
+    company: 'iLaboratory',
+    image: '/images/sarah-profile@X2.webp',
   },
   {
     content:
       "As a developer, Templl has opened up amazing opportunities for me. The platform's focus on quality and the supportive community have helped me grow professionally.",
-    author: 'Michael Chen',
+    author: 'Michael Barbier',
     role: 'Senior Developer',
-    company: 'CodeCraft',
-    image: '/images/testimonials/michael.webp',
+    company: 'freelance',
+    image: '/images/micheal-profile@2X.webp',
   },
   {
     content:
       "The talent pool on Templl is exceptional. We've found amazing developers who've brought fresh perspectives and superior skills to our projects.",
-    author: 'Emma Rodriguez',
+    author: 'Diego Rodriguez',
     role: 'Product Manager',
-    company: 'DevSolutions',
-    image: '/images/testimonials/emma.webp',
+    company: 'CredibleFlow',
+    image: '/images/diego-profile@2X.webp',
   },
 ];
 
