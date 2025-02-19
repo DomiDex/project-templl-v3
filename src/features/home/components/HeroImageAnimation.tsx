@@ -159,7 +159,7 @@ export default function HeroImageAnimation(): JSX.Element {
         }}
       >
         <Image
-          src='/images/next.svg'
+          src='/images/next-icon.svg'
           alt='Next.js'
           width={55}
           height={55}
