@@ -87,7 +87,7 @@ export default function HeroImageAnimation(): JSX.Element {
         }}
       >
         <Image
-          src='/images/react.svg'
+          src='/images/react-icon.svg'
           alt='React'
           width={70}
           height={70}
