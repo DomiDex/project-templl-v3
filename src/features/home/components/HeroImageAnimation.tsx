@@ -111,7 +111,7 @@ export default function HeroImageAnimation(): JSX.Element {
         }}
       >
         <Image
-          src='/images/Framer.svg'
+          src='/images/framer.svg'
           alt='Framer'
           width={60}
           height={60}
