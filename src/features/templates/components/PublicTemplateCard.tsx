@@ -29,7 +29,7 @@ export default function PublicTemplateCard({
 
   return (
     <Link href={`/templates/${path}`} className='block group'>
-      <div className='bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-200 dark:hover:bg-purple-800 transition-colors duration-200 rounded-lg p-2 h-full'>
+      <div className='bg-gray-50 dark:bg-purple-900/50  transition-colors duration-200 rounded-lg p-2 h-full'>
         <div className='aspect-[16/9] overflow-hidden rounded-md'>
           <Image
             className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-200'

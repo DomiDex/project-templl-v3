@@ -61,6 +61,10 @@ export default function MainHeader() {
       label: 'Services',
       href: '/services',
     },
+    {
+      label: 'Find a Talent',
+      href: '/profile',
+    },
   ];
 
   return (

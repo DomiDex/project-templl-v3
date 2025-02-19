@@ -35,9 +35,9 @@ interface ProjectsGridProps {
 export default function ProjectsGrid({ userId }: ProjectsGridProps) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
 
   useEffect(() => {
+    const supabase = createClient();
     const fetchProjects = async () => {
       const { data, error } = await supabase
         .from('projects')
@@ -78,7 +78,7 @@ export default function ProjectsGrid({ userId }: ProjectsGridProps) {
     };
 
     fetchProjects();
-  }, [userId, supabase]);
+  }, [userId]);
 
   if (loading) {
     return (

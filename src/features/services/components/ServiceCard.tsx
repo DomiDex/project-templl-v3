@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 interface ServiceCardProps {
   service: {
@@ -21,12 +21,14 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 
   return (
     <Link href={`/services/${path}`} className='block group'>
-      <div className='bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 rounded-lg p-2 h-full'>
+      <div className='bg-gray-50 dark:bg-purple-900/50  transition-colors duration-200 rounded-lg p-2 h-full'>
         <div className='aspect-[16/9] overflow-hidden rounded-md'>
-          <img
+          <Image
             className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-200'
             src={og_image_url || '/placeholder-service.jpg'}
             alt={service_name}
+            width={500}
+            height={280}
           />
         </div>
         <div className='flex flex-row justify-between items-center gap-2 p-2'>
