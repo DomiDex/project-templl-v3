@@ -120,6 +120,30 @@ export default function HeroImageAnimation(): JSX.Element {
       </motion.div>
 
       <motion.div
+        className='absolute bottom-[12%] left-[-5%] z-10'
+        style={{
+          x: useTransform(springX, [-300, 300], [-20, 15]),
+          y: useTransform(springY, [-300, 300], [15, -20]),
+        }}
+        animate={{
+          rotate: [0, 360],
+          scale: [1, 1.1, 1],
+        }}
+        transition={{
+          rotate: { duration: 40, repeat: Infinity, ease: 'linear' },
+          scale: { duration: 8, repeat: Infinity, ease: 'easeInOut' },
+        }}
+      >
+        <Image
+          src='/images/Svelte.svg'
+          alt='Svelte'
+          width={65}
+          height={65}
+          className='drop-shadow-xl'
+        />
+      </motion.div>
+
+      <motion.div
         className='absolute top-[25%] right-[-12%] z-10'
         style={{
           x: useTransform(springX, [-300, 300], [25, -20]),
