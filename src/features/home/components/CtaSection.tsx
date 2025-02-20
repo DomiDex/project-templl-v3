@@ -12,13 +12,12 @@ export default function CtaSection() {
       <Container size='lg'>
         <div className='w-full flex flex-col md:flex-row items-center justify-between rounded-2xl p-8 md:p-12 bg-white dark:bg-purple-900   border border-gray-100 dark:border-gray-800'>
           <div className='w-full md:w-1/2 relative order-2 md:order-1'>
-            <div className='relative'>
+            <div className='relative aspect-square overflow-hidden w-full max-w-[600px]'>
               <Image
                 src='/images/cta@2x.webp'
                 alt='Transform Your Digital Experience'
-                width={600}
-                height={300}
-                className='relative rounded-lg'
+                fill
+                className='object-cover object-bottom rounded-lg'
                 priority
               />
             </div>
