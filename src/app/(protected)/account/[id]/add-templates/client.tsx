@@ -7,7 +7,7 @@ import TemplatesForm from '@/features/templates/TemplateForm/components/Template
 import TemplateAccountGrid from '@/features/templates/components/TemplateAccountGrid';
 import { useParams } from 'next/navigation';
 
-export default function AddTemplateClient() {
+const AddTemplateClient = () => {
   const params = useParams();
   const userId = params.id as string;
 
@@ -38,4 +38,6 @@ export default function AddTemplateClient() {
       </Container>
     </Section>
   );
-}
+};
+
+export default AddTemplateClient;

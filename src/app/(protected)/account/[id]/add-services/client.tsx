@@ -7,7 +7,7 @@ import ServicesForm from '@/features/services/ServiceForm/components/ServicesFor
 import ServicesGrid from '@/features/services/components/ServicesGrid';
 import { useParams } from 'next/navigation';
 
-export default function AddServicesClient() {
+const AddServicesClient = () => {
   const params = useParams();
   const userId = params.id as string;
 
@@ -38,4 +38,6 @@ export default function AddServicesClient() {
       </Container>
     </Section>
   );
-}
+};
+
+export default AddServicesClient;
