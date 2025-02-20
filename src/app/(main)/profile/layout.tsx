@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Container } from '@/components/ui/container';
 import { Section } from '@/components/ui/section';
-import { Breadcrumb } from '@/components/ui/Breadcrumb';
 
 interface ProfileLayoutProps {
   children: React.ReactNode;
@@ -97,23 +96,14 @@ const profilesJsonLd = {
 };
 
 export default function ProfileLayout({ children }: ProfileLayoutProps) {
-  const breadcrumbItems = [
-    { label: 'Home', href: '/' },
-    { label: 'Profiles', href: '/profile' },
-  ];
-
   return (
     <>
       <script
         type='application/ld+json'
         dangerouslySetInnerHTML={{ __html: JSON.stringify(profilesJsonLd) }}
       />
-      <Section padding='lg'>
-        <Container>
-          <Breadcrumb items={breadcrumbItems} className='mb-6' />
-          <div className='min-h-[50vh]'>{children}</div>
-        </Container>
-      </Section>
+
+      <div className='min-h-[50vh]'>{children}</div>
     </>
   );
 }
