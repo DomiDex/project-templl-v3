@@ -4,14 +4,10 @@ import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { Container } from '@/components/ui/container';
 import { Section } from '@/components/ui/section';
 import ProfileForm from '@/features/account/profile/components/ProfileForm';
-import SkillsGrid from '@/features/skills/components/SkillsGrid';
 import { useProfile } from '@/features/account/profile/hooks/useProfile';
-import { useParams } from 'next/navigation';
 
 export default function Page() {
   const { loading } = useProfile();
-  const params = useParams();
-  const userId = params.id as string;
 
   const breadcrumbItems = [
     { label: 'Account', href: '/account' },
@@ -25,15 +21,6 @@ export default function Page() {
           Profile
         </h1>
         <ProfileForm />
-      </div>
-
-      <div>
-        <h2 className='text-2xl font-bold text-gray-900 dark:text-gray-50 mb-6'>
-          Skills
-        </h2>
-        <div className='max-w-3xl'>
-          <SkillsGrid userId={userId} />
-        </div>
       </div>
     </div>
   );

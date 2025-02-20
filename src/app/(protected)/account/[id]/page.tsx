@@ -6,7 +6,6 @@ import { Section } from '@/components/ui/section';
 import ProjectsGrid from '@/features/projects/components/ProjectsGrid';
 import ServicesGrid from '@/features/services/components/ServicesGrid';
 import TemplatesGrid from '@/features/templates/components/TemplatesGrid';
-import SkillsGrid from '@/features/skills/components/SkillsGrid';
 import { useParams } from 'next/navigation';
 
 export default function Page() {
@@ -19,12 +18,6 @@ export default function Page() {
       <Section padding='lg'>
         <Container size='lg'>
           <div className='space-y-12'>
-            <div>
-              <h2 className='text-2xl font-bold text-gray-900 dark:text-gray-50 mb-4'>
-                Your Skills
-              </h2>
-              <SkillsGrid userId={userId} />
-            </div>
             <div>
               <h2 className='text-2xl font-bold text-gray-900 dark:text-gray-50 mb-4'>
                 Your Projects
