@@ -4,7 +4,7 @@ import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { Container } from '@/components/ui/container';
 import { Section } from '@/components/ui/section';
 import ProjectsForm from '@/features/projects/ProjectForm/components/ProjectsForm';
-import ProjectsGrid from '@/features/projects/components/ProjectsGrid';
+import ProjectAccountGrid from '@/features/projects/components/ProjectAccountGrid';
 import { useParams } from 'next/navigation';
 
 export default function AddProjectPage() {
@@ -32,7 +32,7 @@ export default function AddProjectPage() {
             <h2 className='text-2xl font-bold text-gray-900 dark:text-gray-50 mb-6'>
               Your Projects
             </h2>
-            <ProjectsGrid userId={userId} />
+            <ProjectAccountGrid userId={userId} />
           </div>
         </div>
       </Container>

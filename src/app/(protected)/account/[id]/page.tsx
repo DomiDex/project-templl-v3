@@ -3,10 +3,10 @@
 import AccountHero from '@/features/account/components/AccountHero';
 import { Container } from '@/components/ui/container';
 import { Section } from '@/components/ui/section';
-import ProjectsGrid from '@/features/projects/components/ProjectsGrid';
 import ServicesGrid from '@/features/services/components/ServicesGrid';
-import TemplatesGrid from '@/features/templates/components/TemplatesGrid';
+import TemplateAccountGrid from '@/features/templates/components/TemplateAccountGrid';
 import { useParams } from 'next/navigation';
+import ProjectAccountGrid from '@/features/projects/components/ProjectAccountGrid';
 
 export default function Page() {
   const params = useParams();
@@ -22,7 +22,7 @@ export default function Page() {
               <h2 className='text-2xl font-bold text-gray-900 dark:text-gray-50 mb-4'>
                 Your Projects
               </h2>
-              <ProjectsGrid userId={userId} />
+              <ProjectAccountGrid userId={userId} />
             </div>
             <div>
               <h2 className='text-2xl font-bold text-gray-900 dark:text-gray-50 mb-4'>
@@ -34,7 +34,7 @@ export default function Page() {
               <h2 className='text-2xl font-bold text-gray-900 dark:text-gray-50 mb-4'>
                 Your Templates
               </h2>
-              <TemplatesGrid userId={userId} />
+              <TemplateAccountGrid userId={userId} />
             </div>
           </div>
         </Container>
