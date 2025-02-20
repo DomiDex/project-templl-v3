@@ -1,6 +1,4 @@
 import type { Metadata } from 'next';
-import { Container } from '@/components/ui/container';
-import { Section } from '@/components/ui/section';
 
 interface ProfileLayoutProps {
   children: React.ReactNode;

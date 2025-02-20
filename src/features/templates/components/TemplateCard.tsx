@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface TemplateCardProps {
   template: {
@@ -26,12 +27,15 @@ export default function TemplateCard({ template }: TemplateCardProps) {
 
   return (
     <Link href={`/templates/${path}`} className='block group'>
-      <div className='bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200 rounded-lg p-2 h-full'>
-        <div className='aspect-[16/9] overflow-hidden rounded-md'>
-          <img
-            className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-200'
+      <div className='bg-gray-50 dark:bg-purple-900 transition-colors duration-200 rounded-lg p-2 h-full'>
+        <div className='aspect-[3/2] overflow-hidden rounded-md relative'>
+          <Image
+            className='object-cover group-hover:scale-105 transition-transform duration-200'
             src={thumbnail_image_url || '/placeholder-template.jpg'}
             alt={template_name}
+            fill
+            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+            priority={false}
           />
         </div>
         <div className='flex flex-row justify-between items-center gap-2 p-2'>
