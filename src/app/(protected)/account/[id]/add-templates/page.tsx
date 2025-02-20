@@ -4,7 +4,7 @@ import { Breadcrumb } from '@/components/ui/Breadcrumb';
 import { Container } from '@/components/ui/container';
 import { Section } from '@/components/ui/section';
 import TemplatesForm from '@/features/templates/TemplateForm/components/TemplatesForm';
-import TemplatesGrid from '@/features/templates/components/TemplatesGrid';
+import TemplateAccountGrid from '@/features/templates/components/TemplateAccountGrid';
 import { useParams } from 'next/navigation';
 
 export default function AddTemplatePage() {
@@ -32,7 +32,7 @@ export default function AddTemplatePage() {
             <h2 className='text-2xl font-bold text-gray-900 dark:text-gray-50 mb-6'>
               Your Templates
             </h2>
-            <TemplatesGrid userId={userId} />
+            <TemplateAccountGrid userId={userId} />
           </div>
         </div>
       </Container>
