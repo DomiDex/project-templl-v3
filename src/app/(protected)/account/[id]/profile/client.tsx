@@ -6,7 +6,7 @@ import { Section } from '@/components/ui/section';
 import ProfileForm from '@/features/account/profile/components/ProfileForm';
 import { useProfile } from '@/features/account/profile/hooks/useProfile';
 
-const ProfileClient = () => {
+export default function ProfileClient() {
   const { loading } = useProfile();
 
   const breadcrumbItems = [
@@ -68,6 +68,4 @@ const ProfileClient = () => {
       </Container>
     </Section>
   );
-};
-
-export default ProfileClient;
+}
