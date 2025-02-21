@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import dynamic from 'next/dynamic';
 
 interface ToolbarButton {
   icon: React.ElementType;
@@ -47,6 +48,14 @@ export interface MarkdownEditorProps
   preview?: boolean;
   onPreviewToggle?: (isPreview: boolean) => void;
 }
+
+// Dynamically import the actual editor component with no SSR
+const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
+  ssr: false,
+  loading: () => (
+    <div className='animate-pulse bg-gray-200 dark:bg-gray-700 rounded-lg h-64 w-full' />
+  ),
+});
 
 const MarkdownEditor = forwardRef<HTMLTextAreaElement, MarkdownEditorProps>(
   (
@@ -235,3 +244,8 @@ const MarkdownEditor = forwardRef<HTMLTextAreaElement, MarkdownEditorProps>(
 MarkdownEditor.displayName = 'MarkdownEditor';
 
 export { MarkdownEditor };
+
+// Prevent importing the styles on the server side
+if (typeof window !== 'undefined') {
+  import('@uiw/react-md-editor/markdown-editor.css');
+}
