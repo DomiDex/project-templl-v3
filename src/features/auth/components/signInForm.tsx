@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { GoogleIcon } from '@/components/icons/google';
+// import { GoogleIcon } from '@/components/icons/google';
 import Link from 'next/link';
 import { AuthError } from '../components/auth-error';
 import { signIn } from '../actions/sign-in';
@@ -88,7 +88,7 @@ export default function SignInForm() {
         </Button>
       </form>
 
-      <div className='relative'>
+      {/* <div className='relative'>
         <div className='absolute inset-0 flex items-center'>
           <span className='w-full border-t border-gray-300 dark:border-gray-700' />
         </div>
@@ -112,7 +112,7 @@ export default function SignInForm() {
       >
         <GoogleIcon className='w-5 h-5 mr-2' />
         <span>Sign in with Google</span>
-      </Button>
+      </Button> */}
     </div>
   );
 }
