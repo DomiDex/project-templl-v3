@@ -1,7 +1,12 @@
 import { Section } from '@/components/ui/section';
 import { Container } from '@/components/ui/container';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
-import PublicServicesGrid from '@/features/services/components/PublicServicesGrid';
+import dynamic from 'next/dynamic';
+
+const PublicServicesGrid = dynamic(
+  () => import('@/features/services/components/PublicServicesGrid'),
+  { ssr: false }
+);
 
 export default function ServicesPage() {
   const breadcrumbItems = [

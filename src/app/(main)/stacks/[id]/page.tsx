@@ -5,14 +5,28 @@ import { createClient } from '@/utils/supabase/client';
 import { Section } from '@/components/ui/section';
 import { Container } from '@/components/ui/container';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
-import { Stack } from '@/types';
-import PublicTemplateCard from '@/features/templates/components/PublicTemplateCard';
-import ServiceCard from '@/features/services/components/ServiceCard';
-import { toast } from 'sonner';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import { toast } from 'sonner';
 import { useParams } from 'next/navigation';
+import remarkGfm from 'remark-gfm';
+
+const ReactMarkdown = dynamic(() => import('react-markdown'), {
+  ssr: false,
+  loading: () => (
+    <div className='animate-pulse bg-gray-200 dark:bg-gray-700 h-32 rounded-md' />
+  ),
+});
+
+const PublicTemplateCard = dynamic(
+  () => import('@/features/templates/components/PublicTemplateCard'),
+  { ssr: false }
+);
+
+const ServiceCard = dynamic(
+  () => import('@/features/services/components/ServiceCard'),
+  { ssr: false }
+);
 
 interface DatabaseTemplate {
   id: string;
@@ -46,18 +60,30 @@ interface PublicTemplate {
 
 interface PublicService {
   id: string;
-  path: string;
-  og_image_url: string;
   service_name: string;
-  price: number;
-  user_username: string;
   stack_name: string;
+  user_username: string;
+  og_image_url: string;
+  price: number;
+  path: string;
+}
+
+interface StackData {
+  id: string;
+  stack_name: string;
+  path: string;
+  meta_description: string;
+  long_description: string;
+  icon: string;
+  og_image: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export default function StackDetailPage() {
   const params = useParams();
   const stackId = params?.id as string;
-  const [stack, setStack] = useState<Stack | null>(null);
+  const [stack, setStack] = useState<StackData | null>(null);
   const [templates, setTemplates] = useState<PublicTemplate[]>([]);
   const [services, setServices] = useState<PublicService[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,7 +94,6 @@ export default function StackDetailPage() {
       if (!stackId) return;
 
       try {
-        // Fetch stack with specific fields
         const { data: stackData, error: stackError } = await supabase
           .from('stacks')
           .select(
@@ -79,7 +104,9 @@ export default function StackDetailPage() {
             meta_description,
             long_description,
             icon,
-            og_image
+            og_image,
+            created_at,
+            updated_at
           `
           )
           .eq('path', stackId)
@@ -91,7 +118,7 @@ export default function StackDetailPage() {
           return;
         }
 
-        setStack(stackData);
+        setStack(stackData as StackData);
 
         // Fetch templates for this stack
         const { data: templatesData, error: templatesError } = await supabase

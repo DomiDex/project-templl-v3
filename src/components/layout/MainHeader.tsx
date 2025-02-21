@@ -1,15 +1,36 @@
 'use client';
 
 import { Logo } from '@/components/ui/logo';
-import { ThemeSwitch } from '@/features/theme/components/theme-switch';
-import SignInSystem from '@/features/auth/components/SignInSystem';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { NavigationItem } from './Navigation/MainNav';
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { Stack, Category } from '@/types';
-import { MegaMenuDropdown } from './Navigation/MegaMenuDropdown';
-import { MobileNav } from './Navigation/MobileNav';
+
+const ThemeSwitch = dynamic(
+  () =>
+    import('@/features/theme/components/theme-switch').then(
+      (mod) => mod.ThemeSwitch
+    ),
+  { ssr: false }
+);
+
+const SignInSystem = dynamic(
+  () => import('@/features/auth/components/SignInSystem'),
+  { ssr: false }
+);
+
+const MegaMenuDropdown = dynamic(
+  () =>
+    import('./Navigation/MegaMenuDropdown').then((mod) => mod.MegaMenuDropdown),
+  { ssr: false }
+);
+
+const MobileNav = dynamic(
+  () => import('./Navigation/MobileNav').then((mod) => mod.MobileNav),
+  { ssr: false }
+);
 
 export default function MainHeader() {
   const [stacks, setStacks] = useState<
