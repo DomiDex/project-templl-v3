@@ -25,16 +25,6 @@ export const metadata: Metadata = {
     'React templates',
   ],
   referrer: 'origin-when-cross-origin',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#242424' },
-  ],
-  colorScheme: 'dark light',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-  },
   creator: 'Templl.dev Team',
   publisher: 'Templl.dev',
   openGraph: {

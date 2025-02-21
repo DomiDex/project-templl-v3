@@ -29,9 +29,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <head>
-        <meta name='viewport' content={viewport.toString()} />
-      </head>
       <body className={`${siteFont.variable} antialiased`}>
         <ThemeProvider>
           {children}
