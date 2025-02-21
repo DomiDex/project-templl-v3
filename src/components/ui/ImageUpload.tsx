@@ -1,26 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-import Image from 'next/image';
-import dynamic from 'next/dynamic';
 import { UploadCloud, X } from 'lucide-react';
+import Image from 'next/image';
 import { createClient } from '@/utils/supabase/client';
 import { useAuthStore } from '@/features/auth/stores/useAuthStore';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-
-// Dynamically import heavy dependencies
-const Dropzone = dynamic(
-  () => import('react-dropzone').then((mod) => mod.default),
-  {
-    ssr: false,
-    loading: () => (
-      <div className='border-2 border-dashed border-gray-300 rounded-lg p-6 text-center'>
-        Loading uploader...
-      </div>
-    ),
-  }
-);
 
 interface ImageUploadProps {
   imageUrl: string;
@@ -45,7 +30,6 @@ export function ImageUpload({
 }: ImageUploadProps) {
   const { user } = useAuthStore();
   const supabase = createClient();
-  const [preview, setPreview] = useState<string | undefined>(imageUrl);
 
   const handleImageUpload = async (file: File) => {
     if (!user?.id) {
@@ -90,7 +74,6 @@ export function ImageUpload({
         } = supabase.storage.from(bucket).getPublicUrl(filePath);
 
         onImageChange(publicUrl);
-        setPreview(publicUrl);
         resolve('Image uploaded successfully');
       } catch (error) {
         reject(error);
@@ -108,18 +91,6 @@ export function ImageUpload({
     });
   };
 
-  const handleDrop = (acceptedFiles: File[]) => {
-    const file = acceptedFiles[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-      handleImageUpload(file);
-    }
-  };
-
   return (
     <div className={cn('space-y-2', className)}>
       <label className='block text-sm font-medium text-gray-700 dark:text-gray-200'>
@@ -127,45 +98,46 @@ export function ImageUpload({
       </label>
 
       <div className='flex items-center justify-center w-full'>
-        <Dropzone
-          onDrop={handleDrop}
-          accept={{
-            'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp'],
-          }}
-          multiple={false}
-        >
-          {({ getRootProps, getInputProps }) => (
-            <div
-              {...getRootProps()}
-              className={cn(
-                'flex flex-col items-center justify-center w-full h-64',
-                'border-2 border-dashed rounded-lg cursor-pointer',
-                'border-purple-200 dark:border-purple-700',
-                'hover:border-purple-300 dark:hover:border-purple-600',
-                'bg-gray-50 dark:bg-purple-900/20',
-                'hover:bg-gray-100 dark:hover:bg-purple-800/30',
-                'transition-colors duration-200'
-              )}
-            >
-              <input {...getInputProps()} />
-              <div className='flex flex-col items-center justify-center pt-5 pb-6'>
-                <UploadCloud className='w-8 h-8 mb-4 text-purple-500 dark:text-purple-400' />
-                <p className='mb-2 text-sm text-gray-600 dark:text-gray-300'>
-                  <span className='font-semibold'>Click to upload</span> or drag
-                  and drop
-                </p>
-                <p className='text-xs text-gray-500 dark:text-gray-400'>
-                  {helperText}
-                </p>
-              </div>
-            </div>
+        <label
+          htmlFor={id}
+          className={cn(
+            imageUrl
+              ? 'hidden'
+              : 'flex flex-col items-center justify-center w-full h-64',
+            'border-2 border-dashed rounded-lg cursor-pointer',
+            'border-purple-200 dark:border-purple-700',
+            'hover:border-purple-300 dark:hover:border-purple-600',
+            'bg-gray-50 dark:bg-purple-900/20',
+            'hover:bg-gray-100 dark:hover:bg-purple-800/30',
+            'transition-colors duration-200'
           )}
-        </Dropzone>
+        >
+          <div className='flex flex-col items-center justify-center pt-5 pb-6'>
+            <UploadCloud className='w-8 h-8 mb-4 text-purple-500 dark:text-purple-400' />
+            <p className='mb-2 text-sm text-gray-600 dark:text-gray-300'>
+              <span className='font-semibold'>Click to upload</span> or drag and
+              drop
+            </p>
+            <p className='text-xs text-gray-500 dark:text-gray-400'>
+              {helperText}
+            </p>
+          </div>
+          <input
+            id={id}
+            type='file'
+            accept='image/*'
+            className='hidden'
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) handleImageUpload(file);
+            }}
+          />
+        </label>
 
-        {preview && (
+        {imageUrl && (
           <div className='relative w-full h-64'>
             <Image
-              src={preview}
+              src={imageUrl}
               alt='Upload preview'
               fill
               className='rounded-lg object-cover'

@@ -2,16 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
+import TemplateCard from './TemplateCard';
 import { toast } from 'sonner';
-import dynamic from 'next/dynamic';
-
-// Dynamically import TemplateCard with loading fallback
-const TemplateCard = dynamic(() => import('./TemplateCard'), {
-  loading: () => (
-    <div className='animate-pulse bg-gray-200 dark:bg-gray-700 rounded-lg h-64 w-full' />
-  ),
-  ssr: false, // Disable SSR for this component if it's not needed on first load
-});
 
 interface Template {
   id: string;
