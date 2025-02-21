@@ -1,12 +1,7 @@
 import { Section } from '@/components/ui/section';
 import { Container } from '@/components/ui/container';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
-import dynamic from 'next/dynamic';
-
-const PublicServicesGrid = dynamic(
-  () => import('@/features/services/components/PublicServicesGrid'),
-  { ssr: false }
-);
+import { ServicesGridWrapper } from '@/features/services/components';
 
 export default function ServicesPage() {
   const breadcrumbItems = [
@@ -25,7 +20,7 @@ export default function ServicesPage() {
         <p className='text-gray-600 dark:text-gray-400 mb-8'>
           See all services that freelancers offer.
         </p>
-        <PublicServicesGrid />
+        <ServicesGridWrapper />
       </Container>
     </Section>
   );

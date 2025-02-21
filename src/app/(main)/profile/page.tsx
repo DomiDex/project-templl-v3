@@ -1,12 +1,7 @@
 import { Container } from '@/components/ui/container';
 import { Section } from '@/components/ui/section';
 import { Breadcrumb } from '@/components/ui/Breadcrumb';
-import dynamic from 'next/dynamic';
-
-const ProfilesGrid = dynamic(
-  () => import('@/features/profile/components/ProfilesGrid'),
-  { ssr: false }
-);
+import ProfilesGridWrapper from '@/features/profile/components/ProfilesGridWrapper';
 
 export default function ProfilesPage() {
   const breadcrumbItems = [{ label: 'Profiles', href: '/profile' }];
@@ -26,7 +21,7 @@ export default function ProfilesPage() {
               project.
             </p>
           </div>
-          <ProfilesGrid />
+          <ProfilesGridWrapper />
         </div>
       </Container>
     </Section>
