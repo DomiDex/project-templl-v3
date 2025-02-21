@@ -4,11 +4,14 @@
     "Discorver",
     "doesn",
     "domidex",
+    "lastmod",
+    "maxage",
     "sonner",
     "supabase",
     "templl",
     "transformative",
-    "turbopack"
+    "turbopack",
+    "urlset"
   ],
   "terminal.integrated.sendKeybindingsToShell": true
 }
