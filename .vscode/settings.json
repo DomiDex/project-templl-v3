@@ -9,5 +9,6 @@
     "templl",
     "transformative",
     "turbopack"
-  ]
+  ],
+  "terminal.integrated.sendKeybindingsToShell": true
 }
