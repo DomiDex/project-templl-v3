@@ -9,7 +9,14 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    domains: ['hocycivcjajujxsprvfg.supabase.co'], // Replace with your actual Supabase project domain
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'hocycivcjajujxsprvfg.supabase.co',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
 };
 

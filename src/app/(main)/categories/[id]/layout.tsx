@@ -10,6 +10,7 @@ export async function generateMetadata({
   params,
 }: CategoryLayoutProps): Promise<Metadata> {
   const supabase = await createClient();
+  const categoryId = params.id;
 
   try {
     const { data: category, error } = await supabase
@@ -22,7 +23,7 @@ export async function generateMetadata({
         path
       `
       )
-      .eq('path', params.id)
+      .eq('path', categoryId)
       .single();
 
     if (error || !category) {
