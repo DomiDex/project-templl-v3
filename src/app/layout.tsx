@@ -7,11 +7,11 @@ import ToastProvider from '@/components/providers/ToastProvider';
 export const metadata: Metadata = {
   metadataBase: new URL('https://templl.dev'),
   title: {
-    default: 'Templl.dev - Developer Templates and Services',
+    default: 'Templl.dev - Developer Templates and Services Marketplace',
     template: '%s | Templl.dev',
   },
   description:
-    'Discover and share developer templates, projects, and services. Connect with top developers and find the perfect starting point for your next web project.',
+    'Discover and purchase high-quality developer templates and services. A marketplace for developers to showcase their work and connect with clients.',
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -49,11 +49,10 @@ export const viewport: Viewport = {
     { media: '(prefers-color-scheme: light)', color: '#ffffff' },
     { media: '(prefers-color-scheme: dark)', color: '#242424' },
   ],
-  colorScheme: 'light dark',
+  colorScheme: 'dark light',
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
