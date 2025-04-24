@@ -1,14 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 // import { GoogleIcon } from '@/components/icons/google';
-import Link from 'next/link';
 import { AuthError } from '../components/auth-error';
 import { signIn } from '../actions/sign-in';
+import { resetPassword } from '../actions/reset-password';
 import { useAuthStore } from '../stores/useAuthStore';
+import { toast } from 'sonner';
 
 export default function SignInForm() {
   const router = useRouter();
@@ -17,6 +18,25 @@ export default function SignInForm() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [resetting, setResetting] = useState(false);
+  const [resetCooldown, setResetCooldown] = useState(false);
+  const [cooldownTime, setCooldownTime] = useState(0);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (cooldownTime > 0) {
+      timer = setInterval(() => {
+        setCooldownTime((prev) => {
+          if (prev <= 1) {
+            setResetCooldown(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [cooldownTime]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,6 +73,61 @@ export default function SignInForm() {
     }
   };
 
+  const handleResetPassword = async () => {
+    if (!email) {
+      toast.error('Please enter your email address first');
+      return;
+    }
+
+    if (resetCooldown) {
+      toast.error(`Please wait ${cooldownTime} seconds before trying again`);
+      return;
+    }
+
+    setResetting(true);
+    setError(null);
+
+    try {
+      const result = await resetPassword({ email });
+
+      if (result.error) {
+        setError(result.error);
+        // If it's a rate limit error, start the cooldown
+        if (result.error.toLowerCase().includes('wait')) {
+          setResetCooldown(true);
+          setCooldownTime(60); // 60 seconds cooldown
+        }
+        toast.error('Failed to send reset email', {
+          description: result.error,
+        });
+        return;
+      }
+
+      if (result.success) {
+        toast.success('Check your email', {
+          description:
+            "We've sent you a password reset link. Please check your inbox and spam folder.",
+        });
+        setPassword('');
+        // Set a cooldown even on success to prevent spam
+        setResetCooldown(true);
+        setCooldownTime(60); // 60 seconds cooldown
+      }
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'Failed to send reset password email';
+      setError(errorMessage);
+      toast.error('Reset password failed', {
+        description: errorMessage,
+      });
+      console.error('Reset password error:', error);
+    } finally {
+      setResetting(false);
+    }
+  };
+
   return (
     <div className='space-y-4'>
       <form onSubmit={handleSubmit} className='space-y-4'>
@@ -75,12 +150,20 @@ export default function SignInForm() {
             disabled={loading}
           />
           <div className='flex justify-end'>
-            <Link
-              href='/forgot-password'
+            <Button
+              type='button'
+              variant='ghost'
+              size='sm'
+              onClick={handleResetPassword}
+              disabled={loading || resetting || resetCooldown}
               className='text-sm text-purple-500 hover:text-purple-600 dark:text-purple-400 dark:hover:text-purple-300 transition-colors'
             >
-              Forgot password?
-            </Link>
+              {resetting
+                ? 'Sending...'
+                : resetCooldown
+                ? `Wait ${cooldownTime}s`
+                : 'Forgot password?'}
+            </Button>
           </div>
         </div>
         <Button type='submit' fullWidth size='lg' disabled={loading}>
