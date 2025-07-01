@@ -16,7 +16,7 @@ export default function HomeHero() {
             </h1>
             <p className='text-muted-foreground'>
               Welcome to our Developer Directory, where you can find skilled
-              developers ready to bring your projects to life. Whether you're
+              developers ready to bring your projects to life. Whether you&apos;re
               looking to hire or join our community, we have the resources you
               need.
             </p>

@@ -104,7 +104,7 @@ export default function ServiceDetailPage() {
               Service not found
             </h1>
             <p className='text-gray-600 dark:text-gray-400 mt-2'>
-              The service you're looking for doesn't exist or has been removed.
+              The service you&apos;re looking for doesn&apos;t exist or has been removed.
             </p>
           </div>
         </Container>

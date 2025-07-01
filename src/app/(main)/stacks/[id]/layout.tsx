@@ -1,5 +1,3 @@
-'use server';
-
 import { Metadata } from 'next';
 import { createClient } from '@/utils/supabase/server';
 
@@ -55,79 +53,12 @@ export async function generateMetadata({
   }
 }
 
-const generateJsonLd = async (params: { id: string }) => {
-  const supabase = await createClient();
-  const { data: stack } = await supabase
-    .from('stacks')
-    .select(
-      `
-      stack_name,
-      meta_description,
-      og_image_url,
-      logo_url
-    `
-    )
-    .eq('path', params.id)
-    .single();
+// JSON-LD generation removed - layouts cannot be async in Next.js
+// Consider moving this to the page component or a separate metadata file
 
-  if (!stack) return null;
-
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'CollectionPage',
-    name: `${stack.stack_name} Templates & Services - Templl.dev`,
-    description: stack.meta_description,
-    url: `https://templl.dev/stacks/${params.id}`,
-    publisher: {
-      '@type': 'Organization',
-      name: 'Templl.dev',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://templl.dev/logo.png',
-      },
-    },
-    image: stack.logo_url || stack.og_image_url || '/home-og-image@2x.webp',
-    breadcrumb: {
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        {
-          '@type': 'ListItem',
-          position: 1,
-          name: 'Home',
-          item: 'https://templl.dev',
-        },
-        {
-          '@type': 'ListItem',
-          position: 2,
-          name: 'Stacks',
-          item: 'https://templl.dev/stacks',
-        },
-        {
-          '@type': 'ListItem',
-          position: 3,
-          name: stack.stack_name,
-          item: `https://templl.dev/stacks/${params.id}`,
-        },
-      ],
-    },
-  };
-};
-
-export default async function StackLayout({
+export default function StackLayout({
   children,
   params,
 }: StackLayoutProps) {
-  const jsonLd = await generateJsonLd(params);
-
-  return (
-    <>
-      {jsonLd && (
-        <script
-          type='application/ld+json'
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-      )}
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }

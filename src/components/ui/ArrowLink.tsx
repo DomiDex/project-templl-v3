@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import AnimatedArrow from './AnimatedArrow';
 
@@ -9,10 +8,9 @@ interface ArrowLinkProps {
 }
 
 export default function ArrowLink({
-  href,
   children,
   className,
-}: ArrowLinkProps) {
+}: Omit<ArrowLinkProps, 'href'>) {
   return (
     <span
       className={cn(

@@ -25,7 +25,7 @@ export default function AboutPage() {
               className='rounded-full'
             />
             <p>
-              DomiDex's journey into the world of web development began with a
+              DomiDex&apos;s journey into the world of web development began with a
               personal quest to create a website that was not only visually
               appealing but also easy to use and navigate.
             </p>
@@ -39,7 +39,7 @@ export default function AboutPage() {
               designs with ease.
             </p>
             <p>
-              DomiDex's passion for web development grew as he realized the
+              DomiDex&apos;s passion for web development grew as he realized the
               potential of websites to connect people and share information. He
               was inspired by the idea of creating online spaces that were not
               only functional but also enjoyable to use. This led him to focus

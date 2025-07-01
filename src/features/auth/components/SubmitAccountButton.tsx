@@ -34,7 +34,7 @@ export default function SubmitAccountButton() {
     if (isAuthenticated && user?.id) {
       fetchProfile();
     }
-  }, [isAuthenticated, user?.id, updateProfile, supabase]);
+  }, [isAuthenticated, user?.id, user?.profile_username, updateProfile, supabase]);
 
   const handleClick = async () => {
     try {

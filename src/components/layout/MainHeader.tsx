@@ -71,7 +71,7 @@ export default function MainHeader() {
     };
 
     fetchData();
-  }, []);
+  }, [supabase]);
 
   const navigationItems: NavigationItem[] = [
     {

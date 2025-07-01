@@ -1,0 +1,128 @@
+{
+  "commands": {
+    "add-doc": {
+      "description": "Create new documentation",
+      "prompt_file": ".claude/commands/add-doc.md"
+    },
+    "update-doc": {
+      "description": "Update existing documentation",
+      "prompt_file": ".claude/commands/update-doc.md"
+    },
+    "read-doc": {
+      "description": "Read and explain documentation",
+      "prompt_file": ".claude/commands/read-doc.md"
+    },
+    "doc-index": {
+      "description": "Generate documentation index",
+      "prompt_file": ".claude/commands/doc-index.md"
+    },
+    "analyze": {
+      "description": "Analyze a specific file or component",
+      "prompt_file": ".claude/commands/analyze-file.md"
+    },
+    "feature": {
+      "description": "Analyze a complete feature",
+      "prompt_file": ".claude/commands/analyze-feature.md"
+    },
+    "review": {
+      "description": "Perform code review with refactoring plan",
+      "prompt_file": ".claude/commands/code-review.md"
+    },
+    "architecture": {
+      "description": "Generate system architecture documentation",
+      "prompt_file": ".claude/commands/architecture-overview.md"
+    },
+    "api-docs": {
+      "description": "Generate API documentation",
+      "prompt_file": ".claude/commands/api-docs.md"
+    },
+    "database": {
+      "description": "Document database schema",
+      "prompt_file": ".claude/commands/database-schema.md"
+    },
+    "tech-debt": {
+      "description": "Identify and catalog technical debt",
+      "prompt_file": ".claude/commands/tech-debt.md"
+    },
+    "tests": {
+      "description": "Generate test cases",
+      "prompt_file": ".claude/commands/generate-tests.md"
+    },
+    "refactor": {
+      "description": "Create refactoring plan",
+      "prompt_file": ".claude/commands/refactor-plan.md"
+    },
+    "setup": {
+      "description": "Generate setup guide",
+      "prompt_file": ".claude/commands/setup-guide.md"
+    },
+    "deploy": {
+      "description": "Generate deployment guide",
+      "prompt_file": ".claude/commands/deployment-guide.md"
+    },
+    "changelog": {
+      "description": "Generate changelog from git history",
+      "prompt_file": ".claude/commands/changelog.md"
+    },
+    "explain": {
+      "description": "Explain codebase overview",
+      "prompt_file": ".claude/commands/explain-codebase.md"
+    },
+    "security": {
+      "description": "Run security audit",
+      "prompt_file": ".claude/commands/security-audit.md"
+    },
+    "performance": {
+      "description": "Run performance audit",
+      "prompt_file": ".claude/commands/performance-audit.md"
+    },
+    "debug": {
+      "description": "Debug issues and problems",
+      "prompt_file": ".claude/commands/debugger.md"
+    }
+  },
+  "aliases": {
+    "doc-add": "add-doc",
+    "doc-update": "update-doc",
+    "doc-read": "read-doc",
+    "index": "doc-index",
+    "analyze-file": "analyze",
+    "analyze-feature": "feature",
+    "code-review": "review",
+    "arch": "architecture",
+    "api": "api-docs",
+    "db-schema": "database",
+    "debt": "tech-debt",
+    "generate-tests": "tests",
+    "refactor-plan": "refactor",
+    "setup-guide": "setup",
+    "deployment": "deploy",
+    "changes": "changelog",
+    "explain-codebase": "explain",
+    "security-audit": "security",
+    "perf": "performance",
+    "debugger": "debug"
+  },
+  "categories": {
+    "Documentation": ["add-doc", "update-doc", "read-doc", "doc-index"],
+    "Code Analysis": ["analyze", "feature", "review"],
+    "Architecture": ["architecture", "api-docs", "database"],
+    "Project Management": ["tech-debt", "tests", "refactor"],
+    "Development Workflow": ["setup", "deploy", "changelog"],
+    "Utilities": ["explain", "security", "performance", "debug"]
+  },
+  "config": {
+    "version": "1.0.0",
+    "commands_directory": ".claude/commands",
+    "output_directory": ".claude/docs",
+    "default_format": "markdown",
+    "auto_save": true
+  },
+  "metadata": {
+    "created": "2024-06-24",
+    "author": "Claude Code Command System",
+    "description": "Comprehensive command system for Claude Code with 20+ specialized commands",
+    "repository": "https://github.com/your-org/claude-code-commands",
+    "documentation": "https://docs.your-org.com/claude-code-commands"
+  }
+}

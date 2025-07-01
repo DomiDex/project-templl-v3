@@ -63,7 +63,7 @@ export default function Footer() {
     };
 
     fetchData();
-  }, []);
+  }, [supabase]);
 
   return (
     <footer className='border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-purple-800/95'>

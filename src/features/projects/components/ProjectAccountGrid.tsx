@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { Project } from '@/types';
 import ProjectAccountCard from './ProjectAccountCard';
@@ -41,7 +41,7 @@ export default function ProjectAccountGrid({
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const supabase = createClient();
 
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('projects')
@@ -68,11 +68,11 @@ export default function ProjectAccountGrid({
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId, supabase]);
 
   useEffect(() => {
     fetchProjects();
-  }, [userId]);
+  }, [fetchProjects]);
 
   const handleEdit = (project: ProjectWithRelations) => {
     setSelectedProject({
