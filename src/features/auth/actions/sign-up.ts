@@ -3,6 +3,8 @@
 import { createClient } from '@/utils/supabase/server';
 import { SignUpFormData, SignUpSchema } from '../types';
 
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 export async function signUp(formData: SignUpFormData) {
   try {
     const validatedData = SignUpSchema.parse(formData);
@@ -24,12 +26,12 @@ export async function signUp(formData: SignUpFormData) {
       return { error: 'Username already taken' };
     }
 
-    // Create auth user - profile will be created automatically via trigger
+    // Create auth user
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: validatedData.email,
       password: validatedData.password,
       options: {
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`,
         data: {
           username: validatedData.username,
         },
@@ -38,6 +40,24 @@ export async function signUp(formData: SignUpFormData) {
 
     if (authError) {
       console.error('Auth error:', authError);
+      
+      // Handle specific email-related errors
+      if (authError.message.includes('email') || authError.status === 500) {
+        if (isDevelopment) {
+          return { 
+            error: 'Email service not configured. In development, you can:\n' +
+                   '1. Configure SMTP in Supabase dashboard\n' +
+                   '2. Use Supabase Inbucket for local testing\n' +
+                   '3. Check spam folder for verification emails',
+            isEmailError: true 
+          };
+        }
+        return { 
+          error: 'Unable to send verification email. Please try again later or contact support.',
+          isEmailError: true 
+        };
+      }
+      
       return { error: authError.message };
     }
 
@@ -45,20 +65,30 @@ export async function signUp(formData: SignUpFormData) {
       return { error: 'Failed to create user' };
     }
 
-    // Wait a moment for the trigger to complete
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // Verify profile was created
-    const { data: profile, error: profileError } = await supabase
+    // Manually create the profile since trigger might not exist
+    const { error: profileError } = await supabase
       .from('profiles')
-      .select('*')
-      .eq('id', authData.user.id)
-      .single();
+      .insert({
+        id: authData.user.id,
+        username: validatedData.username,
+        email: validatedData.email,
+        path: validatedData.username.toLowerCase().replace(/[^a-z0-9]/g, '-'),
+        description: null,
+        profile_image_url: null,
+        phone: null,
+        website_url: null,
+        linkedin_url: null,
+        x_url: null,
+        github_url: null,
+        isPro: false,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
 
-    if (profileError || !profile) {
-      console.error('Profile verification error:', profileError);
-      // Clean up the auth user if profile wasn't created
-      await supabase.auth.admin.deleteUser(authData.user.id);
+    if (profileError) {
+      console.error('Profile creation error:', profileError);
+      // Note: We cannot delete the auth user from client-side
+      // The user will need to try signing up again or contact support
       return { error: 'Failed to create profile. Please try again.' };
     }
 

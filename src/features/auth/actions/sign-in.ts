@@ -26,13 +26,13 @@ export async function signIn(formData: SignInFormData) {
 
     const { data: profile } = await supabase
       .from('profiles')
-      .select('profile_username')
+      .select('username')
       .eq('id', user.id)
       .single();
 
     return {
       success: true,
-      redirectTo: `account/${profile?.profile_username || user.id}`,
+      redirectTo: `/account/${profile?.username || user.id}`,
       user,
     };
   } catch (error) {

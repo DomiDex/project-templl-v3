@@ -1,5 +1,15 @@
 # CLAUDE.md
 
+##Claude rules
+
+1. First think through the problem, read the codebase for relevant files, and write a plan to tasks/todo.md.
+2. The plan should have a list of todo items that you can check off as you complete them
+3. Before you begin working, check in with me and I will verify the plan.
+4. Then, begin working on the todo items, marking them as complete as you go.
+5. Please every step of the way just give me a high level explanation of what changes you made
+6. Make every task and code change you do as simple as possible. We want to avoid making any massive or complex changes. Every change should impact as little code as possible. Everything is about simplicity.
+7. Finally, add a review section to the [todo.md](http://todo.md/) file with a summary of the changes you made and any other relevant information.
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Project Overview
@@ -27,11 +37,13 @@ Note: TypeScript and ESLint errors are currently ignored during builds (`ignoreB
 ## Architecture & Structure
 
 ### Route Groups
+
 - `(auth)` - Authentication pages (sign-in, sign-up, verify-email)
 - `(main)` - Public pages (home, services, templates, categories, profiles)
 - `(protected)` - Account management pages requiring authentication
 
 ### Feature-Based Organization
+
 ```
 src/features/
 ├── auth/          # Authentication logic, components, actions
@@ -52,13 +64,14 @@ src/features/
 ## Database & Supabase Patterns
 
 ### Query Best Practices
+
 ```typescript
 // Always type your queries
 const { data, error } = await supabase
   .from('templates')
-  .select('*, categories(*), stacks(*)')  // Specify columns and relations
+  .select('*, categories(*), stacks(*)') // Specify columns and relations
   .order('created_at', { ascending: false })
-  .range(from, to);  // Use range for pagination
+  .range(from, to); // Use range for pagination
 
 // Handle errors properly
 if (error) {
@@ -68,21 +81,24 @@ if (error) {
 ```
 
 ### Service Limits
+
 - Free users: Maximum 3 projects/services
 - Pro users: Unlimited projects/services
 
 ## Styling Guidelines
 
 ### Tailwind Configuration
+
 - Custom color system with CSS variables (--background, --foreground, etc.)
 - Gray scale (50-900) and Purple scale (50-900)
 - Dark mode support using `dark:` modifier
 - Mobile-first responsive design (breakpoints: md, lg)
 
 ### Component Styling Pattern
+
 ```tsx
 // Use utility classes directly, avoid custom CSS
-<button className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded">
+<button className='bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded'>
   Click me
 </button>
 ```
@@ -100,6 +116,7 @@ if (error) {
 ## Current Development Status
 
 ### Completed ✅
+
 - Authentication system with email verification
 - Forms for projects, services, templates, and profiles
 - Pro user features and service limits
@@ -107,6 +124,7 @@ if (error) {
 - Dark/light theme system
 
 ### In Progress 🚧
+
 - CRUD operations in account pages (display, edit, delete)
 - Main page creation and content population
 
@@ -121,6 +139,7 @@ if (error) {
 ## Environment Configuration
 
 Required environment variables in `.env.local`:
+
 ```
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
