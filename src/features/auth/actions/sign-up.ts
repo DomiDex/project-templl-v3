@@ -10,10 +10,13 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 
 export async function signUp(formData: SignUpFormData & { _csrf?: string }) {
   try {
-    // Validate CSRF token
-    const isValidCSRF = await validateCSRFToken(formData._csrf);
-    if (!isValidCSRF) {
-      return { error: 'Invalid security token. Please refresh the page and try again.' };
+    // Validate CSRF token if provided
+    // TODO: Make CSRF required once all forms are updated
+    if (formData._csrf !== undefined) {
+      const isValidCSRF = await validateCSRFToken(formData._csrf);
+      if (!isValidCSRF) {
+        return { error: 'Invalid security token. Please refresh the page and try again.' };
+      }
     }
     
     const validatedData = SignUpSchema.parse(formData);
