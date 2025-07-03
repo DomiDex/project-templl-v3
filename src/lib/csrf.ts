@@ -8,7 +8,7 @@ export function generateCSRFToken(): string {
 }
 
 export async function getCSRFToken(): Promise<string> {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   let token = cookieStore.get(CSRF_TOKEN_NAME)?.value;
   
   if (!token) {
@@ -28,14 +28,14 @@ export async function getCSRFToken(): Promise<string> {
 export async function validateCSRFToken(token: string | null | undefined): Promise<boolean> {
   if (!token) return false;
   
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const storedToken = cookieStore.get(CSRF_TOKEN_NAME)?.value;
   
   return token === storedToken;
 }
 
 export async function getOrCreateCSRFToken(): Promise<string> {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   let token = cookieStore.get(CSRF_TOKEN_NAME)?.value;
   
   if (!token) {

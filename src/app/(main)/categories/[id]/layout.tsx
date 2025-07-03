@@ -3,14 +3,14 @@ import { createClient } from '@/utils/supabase/server';
 
 interface CategoryLayoutProps {
   children: React.ReactNode;
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function generateMetadata({
   params,
 }: CategoryLayoutProps): Promise<Metadata> {
   const supabase = await createClient();
-  const categoryId = params.id;
+  const { id: categoryId } = await params;
 
   try {
     const { data: category, error } = await supabase

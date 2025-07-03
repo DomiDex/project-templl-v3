@@ -3,12 +3,13 @@ import { createClient } from '@/utils/supabase/server';
 
 interface StackLayoutProps {
   children: React.ReactNode;
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function generateMetadata({
   params,
 }: StackLayoutProps): Promise<Metadata> {
+  const { id } = await params;
   const supabase = await createClient();
 
   try {
@@ -22,7 +23,7 @@ export async function generateMetadata({
         og_image
       `
       )
-      .eq('path', params.id)
+      .eq('path', id)
       .single();
 
     if (error || !stack) {

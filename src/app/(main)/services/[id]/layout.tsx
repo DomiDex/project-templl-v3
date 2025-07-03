@@ -3,12 +3,13 @@ import { createClient } from '@/utils/supabase/server';
 
 interface ServiceLayoutProps {
   children: React.ReactNode;
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function generateMetadata({
   params,
 }: ServiceLayoutProps): Promise<Metadata> {
+  const { id } = await params;
   const supabase = await createClient();
 
   try {
@@ -28,7 +29,7 @@ export async function generateMetadata({
         )
       `
       )
-      .eq('path', params.id)
+      .eq('path', id)
       .single();
 
     if (error || !service) {
@@ -49,7 +50,7 @@ export async function generateMetadata({
       openGraph: {
         type: 'website',
         locale: 'en_US',
-        url: `https://templl.dev/services/${params.id}`,
+        url: `https://templl.dev/services/${id}`,
         siteName: 'Templl.dev',
         title,
         description,
@@ -71,7 +72,7 @@ export async function generateMetadata({
         site: '@templl_dev',
       },
       alternates: {
-        canonical: `https://templl.dev/services/${params.id}`,
+        canonical: `https://templl.dev/services/${id}`,
       },
       robots: {
         index: true,
@@ -96,7 +97,8 @@ export async function generateMetadata({
 }
 
 // JSON-LD Schema for better SEO
-const generateJsonLd = async (params: { id: string }) => {
+const generateJsonLd = async (params: Promise<{ id: string }>) => {
+  const { id } = await params;
   const supabase = await createClient();
   const { data: service } = await supabase
     .from('services')
@@ -110,7 +112,7 @@ const generateJsonLd = async (params: { id: string }) => {
       profiles (username)
     `
     )
-    .eq('path', params.id)
+    .eq('path', id)
     .single();
 
   if (!service) return null;
@@ -130,7 +132,7 @@ const generateJsonLd = async (params: { id: string }) => {
       priceCurrency: 'USD',
     },
     image: service.og_image_url || '/home-og-image@2x.webp',
-    url: `https://templl.dev/services/${params.id}`,
+    url: `https://templl.dev/services/${id}`,
     category: service.stacks[0]?.stack_name,
     breadcrumb: {
       '@type': 'BreadcrumbList',
@@ -151,7 +153,7 @@ const generateJsonLd = async (params: { id: string }) => {
           '@type': 'ListItem',
           position: 3,
           name: service.service_name,
-          item: `https://templl.dev/services/${params.id}`,
+          item: `https://templl.dev/services/${id}`,
         },
       ],
     },

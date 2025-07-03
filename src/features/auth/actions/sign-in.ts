@@ -17,7 +17,7 @@ export async function signIn(formData: SignInFormData & { _csrf?: string }) {
     const validatedData = SignInSchema.parse(formData);
     
     // Get IP address for rate limiting
-    const headersList = headers();
+    const headersList = await headers();
     const forwardedFor = headersList.get('x-forwarded-for');
     const realIp = headersList.get('x-real-ip');
     const identifier = forwardedFor || realIp || 'anonymous';

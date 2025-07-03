@@ -11,15 +11,16 @@ import { Metadata } from 'next';
 export async function generateMetadata({
   params,
 }: {
-  params: { path: string };
+  params: Promise<{ path: string }>;
 }): Promise<Metadata> {
   const supabase = await createClient();
+  const { path } = await params;
 
   try {
     const { data: profile, error } = await supabase
       .from('profiles')
       .select('*')
-      .eq('path', params.path)
+      .eq('path', path)
       .single();
 
     if (error || !profile) {
@@ -40,7 +41,7 @@ export async function generateMetadata({
       openGraph: {
         type: 'profile',
         locale: 'en_US',
-        url: `https://templl.dev/profile/${params.path}`,
+        url: `https://templl.dev/profile/${path}`,
         siteName: 'Templl.dev',
         title,
         description,
@@ -62,7 +63,7 @@ export async function generateMetadata({
         site: '@templl_dev',
       },
       alternates: {
-        canonical: `https://templl.dev/profile/${params.path}`,
+        canonical: `https://templl.dev/profile/${path}`,
       },
       robots: {
         index: true,
@@ -88,15 +89,16 @@ export async function generateMetadata({
 export default async function ProfilePage({
   params,
 }: {
-  params: { path: string };
+  params: Promise<{ path: string }>;
 }) {
   const supabase = await createClient();
+  const { path } = await params;
 
   // Fetch profile data
   const { data: profile, error } = await supabase
     .from('profiles')
     .select('*')
-    .eq('path', params.path)
+    .eq('path', path)
     .single();
 
   if (error || !profile) {
@@ -104,7 +106,7 @@ export default async function ProfilePage({
   }
 
   const breadcrumbItems = [
-    { label: 'Profile', href: `/profile/${params.path}` },
+    { label: 'Profile', href: `/profile/${path}` },
   ];
 
   return (

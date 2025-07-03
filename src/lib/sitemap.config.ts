@@ -18,9 +18,11 @@ interface SitemapRoute {
 }
 
 // Initialize Supabase client with service role key for server-side operations
+// Use anon key as fallback for builds without service role key
+const supabaseKey = serverConfig.supabaseServiceRoleKeyOptional || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 const supabase = createClient(
   serverConfig.supabaseUrl,
-  serverConfig.supabaseServiceRoleKey
+  supabaseKey
 );
 
 // Static pages that don't need to be fetched from the database

@@ -3,12 +3,13 @@ import { createClient } from '@/utils/supabase/server';
 
 interface TemplateLayoutProps {
   children: React.ReactNode;
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function generateMetadata({
   params,
 }: TemplateLayoutProps): Promise<Metadata> {
+  const { id } = await params;
   const supabase = await createClient();
 
   try {
@@ -28,7 +29,7 @@ export async function generateMetadata({
         )
       `
       )
-      .eq('path', params.id)
+      .eq('path', id)
       .single();
 
     if (error || !template) {
@@ -49,7 +50,7 @@ export async function generateMetadata({
       openGraph: {
         type: 'website',
         locale: 'en_US',
-        url: `https://templl.dev/templates/${params.id}`,
+        url: `https://templl.dev/templates/${id}`,
         siteName: 'Templl.dev',
         title,
         description,
@@ -71,7 +72,7 @@ export async function generateMetadata({
         site: '@templl_dev',
       },
       alternates: {
-        canonical: `https://templl.dev/templates/${params.id}`,
+        canonical: `https://templl.dev/templates/${id}`,
       },
       robots: {
         index: true,
@@ -94,7 +95,8 @@ export async function generateMetadata({
   }
 }
 
-const generateJsonLd = async (params: { id: string }) => {
+const generateJsonLd = async (params: Promise<{ id: string }>) => {
+  const { id } = await params;
   const supabase = await createClient();
   const { data: template } = await supabase
     .from('templates')
@@ -108,7 +110,7 @@ const generateJsonLd = async (params: { id: string }) => {
       profiles (username)
     `
     )
-    .eq('path', params.id)
+    .eq('path', id)
     .single();
 
   if (!template) return null;
@@ -119,7 +121,7 @@ const generateJsonLd = async (params: { id: string }) => {
     name: template.template_name,
     description: template.meta_description,
     image: template.og_image_url || '/home-og-image@2x.webp',
-    url: `https://templl.dev/templates/${params.id}`,
+    url: `https://templl.dev/templates/${id}`,
     brand: {
       '@type': 'Brand',
       name: 'Templl.dev',
@@ -154,7 +156,7 @@ const generateJsonLd = async (params: { id: string }) => {
           '@type': 'ListItem',
           position: 3,
           name: template.template_name,
-          item: `https://templl.dev/templates/${params.id}`,
+          item: `https://templl.dev/templates/${id}`,
         },
       ],
     },

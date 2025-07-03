@@ -10,7 +10,14 @@ export const getServiceRoleKey = () => {
   return key;
 };
 
+export const getOptionalServiceRoleKey = () => {
+  return process.env.SUPABASE_SERVICE_ROLE_KEY || null;
+};
+
 export const serverConfig = {
   supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  supabaseServiceRoleKey: getServiceRoleKey(),
+  get supabaseServiceRoleKey() {
+    return getServiceRoleKey();
+  },
+  supabaseServiceRoleKeyOptional: getOptionalServiceRoleKey(),
 };
