@@ -5,6 +5,7 @@ import { SignInFormData, SignInSchema } from '../types';
 import { authRateLimiter, checkRateLimit } from '@/lib/rate-limit';
 import { validateCSRFToken } from '@/lib/csrf';
 import { headers } from 'next/headers';
+import { getBaseUrl } from '@/lib/utils/get-base-url';
 
 export async function signIn(formData: SignInFormData & { _csrf?: string }) {
   try {
@@ -54,15 +55,10 @@ export async function signIn(formData: SignInFormData & { _csrf?: string }) {
       return { error: 'No user found' };
     }
 
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('username')
-      .eq('id', user.id)
-      .single();
-
+    const baseUrl = getBaseUrl();
     return {
       success: true,
-      redirectTo: `/account/${profile?.username || user.id}`,
+      redirectTo: `${baseUrl}/account/${user.id}`,
       user,
     };
   } catch (error) {

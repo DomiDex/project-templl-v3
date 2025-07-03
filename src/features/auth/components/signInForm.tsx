@@ -62,8 +62,13 @@ export default function SignInForm() {
           profile_username: result.user.user_metadata?.profile_username,
         });
 
-        router.push(`/${result.redirectTo}`);
-        router.refresh();
+        // If it's an absolute URL, use window.location for redirect
+        if (result.redirectTo.startsWith('http')) {
+          window.location.href = result.redirectTo;
+        } else {
+          router.push(result.redirectTo);
+          router.refresh();
+        }
       }
     } catch (error) {
       setError('An unexpected error occurred');

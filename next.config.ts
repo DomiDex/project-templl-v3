@@ -22,6 +22,12 @@ const nextConfig: NextConfig = {
     ],
   },
   // Security headers are now handled in middleware.ts
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '2mb',
+    },
+  },
+  transpilePackages: ['jose'],
 };
 
 export default nextConfig;
