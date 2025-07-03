@@ -102,7 +102,6 @@ export default function TemplatesForm() {
     <form onSubmit={handleSubmit} className='space-y-6'>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
         <div>
-          <FormLabel>Cover Image</FormLabel>
           <ImageUpload
             imageUrl={formData.og_image_url}
             onImageChange={handleCoverImageChange}
@@ -113,7 +112,6 @@ export default function TemplatesForm() {
           />
         </div>
         <div>
-          <FormLabel>Thumbnail Image</FormLabel>
           <ImageUpload
             imageUrl={formData.thumbnail_image_url}
             onImageChange={handleThumbnailImageChange}
