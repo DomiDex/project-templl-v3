@@ -3,10 +3,12 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   /* config options here */
   typescript: {
-    ignoreBuildErrors: true,
+    // Enable TypeScript error checking during builds
+    ignoreBuildErrors: false,
   },
   eslint: {
-    ignoreDuringBuilds: true,
+    // Enable ESLint error checking during builds
+    ignoreDuringBuilds: false,
   },
   images: {
     remotePatterns: [
@@ -17,6 +19,11 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
+  },
+  // Security headers are now handled in middleware.ts
+  // Performance optimizations
+  experimental: {
+    optimizeCss: true,
   },
 };
 

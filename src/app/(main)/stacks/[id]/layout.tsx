@@ -58,7 +58,6 @@ export async function generateMetadata({
 
 export default function StackLayout({
   children,
-  params,
 }: StackLayoutProps) {
   return <>{children}</>;
 }
