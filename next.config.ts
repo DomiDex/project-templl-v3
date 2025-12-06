@@ -7,10 +7,6 @@ const nextConfig: NextConfig = {
     // TODO: Fix remaining TypeScript errors and re-enable
     ignoreBuildErrors: true,
   },
-  eslint: {
-    // Enable ESLint error checking during builds
-    ignoreDuringBuilds: false,
-  },
   images: {
     remotePatterns: [
       {
